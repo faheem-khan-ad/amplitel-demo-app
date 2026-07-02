@@ -1,0 +1,354 @@
+[1m[33mComponent HMR has been enabled, see https://angular.dev/hmr for more info.[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: All imports are unused[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.ts:6:2:
+[37m      6 │   [32mimports[37m: [RouterOutlet],
+        ╵   [32m~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'openDigitalTwin' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:12:65:
+[37m      12 │ ...s="action-card primary" type="button" (click)="[32mopenDigitalTwin[37m()">
+         ╵                                                   [32m~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'handleButtonTwo' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:18:57:
+[37m      18 │ ...ton class="action-card" type="button" (click)="[32mhandleButtonTwo[37m()">
+         ╵                                                   [32m~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'handleButtonThree' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:24:57:
+[37m      24 │ ...n class="action-card" type="button" (click)="[32mhandleButtonThree[37m()">
+         ╵                                                 [32m~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'activeView' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:32:7:
+[37m      32 │   @if ([32mactiveView[37m === 'digital-twin') {
+         ╵        [32m~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'closeDigitalTwin' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:39:60:
+[37m      39 │ ...n class="close-button" type="button" (click)="[32mcloseDigitalTwin[37m()">
+         ╵                                                  [32m~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'digitalTwinUrl' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:47:15:
+[37m      47 │         [src]="[32mdigitalTwinUrl[37m"
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: All imports are unused[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.ts:6:2:
+[37m      6 │   [32mimports[37m: [RouterOutlet],
+        ╵   [32m~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'openDigitalTwin' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:12:65:
+[37m      12 │ ...s="action-card primary" type="button" (click)="[32mopenDigitalTwin[37m()">
+         ╵                                                   [32m~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'handleButtonTwo' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:18:57:
+[37m      18 │ ...ton class="action-card" type="button" (click)="[32mhandleButtonTwo[37m()">
+         ╵                                                   [32m~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'handleButtonThree' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:24:57:
+[37m      24 │ ...n class="action-card" type="button" (click)="[32mhandleButtonThree[37m()">
+         ╵                                                 [32m~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'activeView' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:32:7:
+[37m      32 │   @if ([32mactiveView[37m === 'digital-twin') {
+         ╵        [32m~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'closeDigitalTwin' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:39:60:
+[37m      39 │ ...n class="close-button" type="button" (click)="[32mcloseDigitalTwin[37m()">
+         ╵                                                  [32m~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'digitalTwinUrl' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:47:15:
+[37m      47 │         [src]="[32mdigitalTwinUrl[37m"
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: All imports are unused[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.ts:6:2:
+[37m      6 │   [32mimports[37m: [RouterOutlet],
+        ╵   [32m~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'openDigitalTwin' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:12:65:
+[37m      12 │ ...s="action-card primary" type="button" (click)="[32mopenDigitalTwin[37m()">
+         ╵                                                   [32m~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'handleButtonTwo' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:18:57:
+[37m      18 │ ...ton class="action-card" type="button" (click)="[32mhandleButtonTwo[37m()">
+         ╵                                                   [32m~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'handleButtonThree' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:24:57:
+[37m      24 │ ...n class="action-card" type="button" (click)="[32mhandleButtonThree[37m()">
+         ╵                                                 [32m~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'activeView' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:32:7:
+[37m      32 │   @if ([32mactiveView[37m === 'digital-twin') {
+         ╵        [32m~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'closeDigitalTwin' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:39:60:
+[37m      39 │ ...n class="close-button" type="button" (click)="[32mcloseDigitalTwin[37m()">
+         ╵                                                  [32m~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'digitalTwinUrl' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:47:15:
+[37m      47 │         [src]="[32mdigitalTwinUrl[37m"
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'sendDigitalTwinOpened' does not exist on type 'DigitalTwinComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/digital-twin.component.html:17:14:
+[37m      17 │       (load)="[32msendDigitalTwinOpened[37m($event)"
+         ╵               [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component DigitalTwinComponent.
+
+    src/app/digital-twin.component.ts:8:15:
+[37m      8 │   templateUrl: [32m'./digital-twin.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: All imports are unused[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.ts:6:2:
+[37m      6 │   [32mimports[37m: [RouterOutlet],
+        ╵   [32m~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'openDigitalTwin' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:12:65:
+[37m      12 │ ...s="action-card primary" type="button" (click)="[32mopenDigitalTwin[37m()">
+         ╵                                                   [32m~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'handleButtonTwo' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:18:57:
+[37m      18 │ ...ton class="action-card" type="button" (click)="[32mhandleButtonTwo[37m()">
+         ╵                                                   [32m~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'handleButtonThree' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:24:57:
+[37m      24 │ ...n class="action-card" type="button" (click)="[32mhandleButtonThree[37m()">
+         ╵                                                 [32m~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'activeView' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:32:7:
+[37m      32 │   @if ([32mactiveView[37m === 'digital-twin') {
+         ╵        [32m~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'closeDigitalTwin' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:39:60:
+[37m      39 │ ...n class="close-button" type="button" (click)="[32mcloseDigitalTwin[37m()">
+         ╵                                                  [32m~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'digitalTwinUrl' does not exist on type 'AppComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/app.component.html:47:15:
+[37m      47 │         [src]="[32mdigitalTwinUrl[37m"
+         ╵                [32m~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component AppComponent.
+
+    src/app/app.component.ts:7:15:
+[37m      7 │   templateUrl: [32m'./app.component.html'[37m,
+        ╵                [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m

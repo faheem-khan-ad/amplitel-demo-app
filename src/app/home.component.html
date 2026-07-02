@@ -1,0 +1,69 @@
+<main class="home-shell">
+  <section class="intro">
+    <p class="eyebrow">Amplitel Operations Console</p>
+    <h1>Network Experience Hub</h1>
+    <p class="subtitle">
+      Launch key tools from one clean workspace and keep the active view in focus.
+    </p>
+
+    <div class="button-row" aria-label="Application actions">
+      <button class="action-button primary" type="button" (click)="openDigitalTwin()">
+        Digital Twin
+      </button>
+
+      <button class="action-button" type="button" (click)="handleButtonTwo()">
+        Button 2
+      </button>
+
+      <button class="action-button" type="button" (click)="handleButtonThree()">
+        Button 3
+      </button>
+    </div>
+
+    @if (components().length > 0) {
+      <section class="components-table-section" aria-label="Digital Twin components">
+        <div class="table-heading">
+          <h2>Digital Twin Components</h2>
+          <span>{{ components().length }} received</span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Index</th>
+                <th>Component Name</th>
+                <th>Component ID</th>
+                <th>Marker ID</th>
+                <th>X Offset</th>
+                <th>Y Offset</th>
+                <th>Z Offset</th>
+                <th>Length</th>
+                <th>Width</th>
+                <th>Depth</th>
+                <th>Azimuth</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (component of components(); track component.index) {
+                <tr>
+                  <td>{{ component.index }}</td>
+                  <td>{{ component.componentName || '-' }}</td>
+                  <td>{{ component.componentId || '-' }}</td>
+                  <td>{{ component.markerId || '-' }}</td>
+                  <td>{{ component.xOffset ?? '-' }}</td>
+                  <td>{{ component.yOffset ?? '-' }}</td>
+                  <td>{{ component.zOffset ?? '-' }}</td>
+                  <td>{{ component.length ?? '-' }}</td>
+                  <td>{{ component.width ?? '-' }}</td>
+                  <td>{{ component.depth ?? '-' }}</td>
+                  <td>{{ component.azimuth ?? '-' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+  </section>
+</main>

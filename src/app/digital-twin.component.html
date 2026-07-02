@@ -1,0 +1,21 @@
+<main class="viewer-shell">
+  <section class="viewer-panel" aria-label="Digital Twin viewer">
+    <div class="viewer-toolbar">
+      <div>
+        <p class="viewer-label">Live iframe</p>
+        <h1>Digital Twin</h1>
+      </div>
+      <button class="close-button" type="button" (click)="closeDigitalTwin()">
+        Close
+      </button>
+    </div>
+
+    <iframe
+      class="digital-twin-frame"
+      title="Digital Twin 3D Canvas"
+      [src]="digitalTwinUrl"
+      (load)="sendDigitalTwinOpened($event)"
+      loading="lazy"
+    ></iframe>
+  </section>
+</main>
