@@ -1,7 +1,7 @@
 <main class="home-shell">
   <section class="intro">
     <p class="eyebrow">Amplitel Operations Console</p>
-    <h1>Network Experience Hub</h1>
+    <h1>Asset Management System</h1>
     <p class="subtitle">
       Launch key tools from one clean workspace and keep the active view in focus.
     </p>
@@ -10,59 +10,152 @@
       <button class="action-button primary" type="button" (click)="openDigitalTwin()">
         Digital Twin
       </button>
-
-      <button class="action-button" type="button" (click)="handleButtonTwo()">
-        Button 2
-      </button>
-
-      <button class="action-button" type="button" (click)="handleButtonThree()">
-        Button 3
-      </button>
     </div>
 
-    @if (components().length > 0) {
-      <section class="components-table-section" aria-label="Digital Twin components">
-        <div class="table-heading">
+    @if (componentSections().length > 0) {
+      <section class="components-area" aria-label="Digital Twin components">
+        <div class="components-summary">
           <h2>Digital Twin Components</h2>
           <span>{{ components().length }} received</span>
         </div>
 
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Index</th>
-                <th>Component Name</th>
-                <th>Component ID</th>
-                <th>Marker ID</th>
-                <th>X Offset</th>
-                <th>Y Offset</th>
-                <th>Z Offset</th>
-                <th>Length</th>
-                <th>Width</th>
-                <th>Depth</th>
-                <th>Azimuth</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (component of components(); track component.index) {
-                <tr>
-                  <td>{{ component.index }}</td>
-                  <td>{{ component.componentName || '-' }}</td>
-                  <td>{{ component.componentId || '-' }}</td>
-                  <td>{{ component.markerId || '-' }}</td>
-                  <td>{{ component.xOffset ?? '-' }}</td>
-                  <td>{{ component.yOffset ?? '-' }}</td>
-                  <td>{{ component.zOffset ?? '-' }}</td>
-                  <td>{{ component.length ?? '-' }}</td>
-                  <td>{{ component.width ?? '-' }}</td>
-                  <td>{{ component.depth ?? '-' }}</td>
-                  <td>{{ component.azimuth ?? '-' }}</td>
-                </tr>
-              }
-            </tbody>
-          </table>
+        @for (section of componentSections(); track section.key) {
+          <article class="components-table-section">
+            <div class="table-heading">
+              <div>
+                <h3>{{ section.title }}</h3>
+                <span>{{ section.components.length }} components</span>
+              </div>
+
+              <button
+                class="edit-section-button"
+                type="button"
+                (click)="editSection(section)"
+              >
+                Visualise in DT
+              </button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>No.</th>
+                    <th>Component Name</th>
+                    <th>Action Taken</th>
+                    <th>Status</th>
+                    <th>X Design</th>
+                    <th>Y Design</th>
+                    <th>Z Design</th>
+                    <th>Direction Orientation Design</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (component of section.components; track component.componentId || component.markerId || component.index; let rowIndex = $index) {
+                    <tr>
+                      <td>{{ rowIndex + 1 }}</td>
+                      <td>
+                        <input
+                          class="table-input"
+                          type="text"
+                          [value]="component.componentName || ''"
+                          (input)="updateOrderComponent(component, 'componentName', $event)"
+                        />
+                      </td>
+                      <td>
+                        <select
+                          class="table-input"
+                          [value]="component.action || ''"
+                          (change)="updateOrderComponent(component, 'action', $event)"
+                        >
+                          <option value="added">added</option>
+                          <option value="removed">removed</option>
+                        </select>
+                      </td>
+                      <td>{{ component.componentStatus || '-' }}</td>
+                      <td>
+                        <input
+                          class="table-input"
+                          type="text"
+                          [value]="component.xOffset ?? ''"
+                          (input)="updateOrderComponent(component, 'xOffset', $event)"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="table-input"
+                          type="text"
+                          [value]="component.yOffset ?? ''"
+                          (input)="updateOrderComponent(component, 'yOffset', $event)"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="table-input"
+                          type="text"
+                          [value]="component.zOffset ?? ''"
+                          (input)="updateOrderComponent(component, 'zOffset', $event)"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="table-input"
+                          type="text"
+                          [value]="component.azimuth ?? ''"
+                          (input)="updateOrderComponent(component, 'azimuth', $event)"
+                        />
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </article>
+        }
+      </section>
+    }
+
+    @if (submittedComponents().length > 0) {
+      <section class="components-area" aria-label="Submitted components">
+        <div class="components-summary">
+          <h2>Submitted Components</h2>
+          <span>{{ submittedComponents().length }} submitted</span>
         </div>
+
+        <article class="components-table-section">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Component Name</th>
+                  <th>Action</th>
+                  <th>Status</th>
+                  <th>Source</th>
+                  <th>X Design</th>
+                  <th>Y Design</th>
+                  <th>Z Design</th>
+                  <th>Direction Orientation Design</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (component of submittedComponents(); track component.componentId; let rowIndex = $index) {
+                  <tr>
+                    <td>{{ rowIndex + 1 }}</td>
+                    <td>{{ component.componentName || '-' }}</td>
+                    <td>{{ component.action || '-' }}</td>
+                    <td>{{ component.componentStatus || '-' }}</td>
+                    <td>{{ component.iframeSessionSource || '-' }}</td>
+                    <td>{{ component.xOffset || '-' }}</td>
+                    <td>{{ component.yOffset || '-' }}</td>
+                    <td>{{ component.zOffset || '-' }}</td>
+                    <td>{{ component.azimuth || '-' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </article>
       </section>
     }
   </section>

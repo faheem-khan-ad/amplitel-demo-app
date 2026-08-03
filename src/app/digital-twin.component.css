@@ -9,7 +9,7 @@
 
 .viewer-shell {
   min-height: 100vh;
-  padding: 24px;
+  padding: 10px;
   background:
     radial-gradient(circle at 12% 16%, rgba(46, 125, 125, 0.18), transparent 28%),
     linear-gradient(135deg, #f7fafc 0%, #e9eff3 58%, #d9e4e8 100%);
@@ -17,7 +17,7 @@
 
 .viewer-panel {
   display: flex;
-  min-height: calc(100vh - 48px);
+  min-height: calc(100vh - 20px);
   overflow: hidden;
   flex-direction: column;
   border: 1px solid rgba(20, 33, 61, 0.1);
@@ -31,7 +31,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 16px 18px;
+  padding: 4px 18px;
   border-bottom: 1px solid rgba(20, 33, 61, 0.1);
 }
 

@@ -3,7 +3,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import {
   ComponentDataStore,
-  DigitalTwinComponentData
+  DigitalTwinComponentData,
+  DigitalTwinOrderPayload
 } from './component-data.store';
 
 @Component({
@@ -27,17 +28,18 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const components = event.data?.payload?.components;
+    const payload = event.data?.payload;
+    const components = payload?.components;
 
     if (!Array.isArray(components)) {
       console.warn('DIGITAL_TWIN_CREATE_COLS received without components array');
       return;
     }
 
-    console.log('Received components from Digital Twin iframe', components);
-    this.componentDataStore.setComponents(
-      components as DigitalTwinComponentData[]
-    );
+    const orderPayload = this.normalizeOrderPayload(payload);
+
+    console.log('Received components from Digital Twin iframe', orderPayload);
+    this.componentDataStore.updateEditSection(orderPayload);
     this.router.navigateByUrl('/');
   };
 
@@ -66,19 +68,62 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
 
   sendDigitalTwinOpened(event: Event): void {
     const iframe = event.target as HTMLIFrameElement;
-    const message = {
+    const editSection = this.componentDataStore.editSection();
+    const openedMessage = {
       type: 'DIGITAL_TWIN_OPENED',
       source: 'amplitel-demo-app',
       triggeredBy: 'digital-twin-button',
+      payload: {
+        submittedComponents: this.componentDataStore.submittedComponents()
+      },
       timestamp: Date.now()
     };
+    const editMessage = editSection
+      ? {
+          type: 'DIGITAL_TWIN_EDIT_SECTION',
+          source: 'amplitel-demo-app',
+          payload: {
+            sectionKey: editSection.key,
+            sectionTitle: editSection.title,
+            order: {
+              key: editSection.key,
+              title: editSection.title,
+              componentCount: editSection.components.length
+            },
+            components: editSection.components,
+            submittedComponents: this.componentDataStore.submittedComponents()
+          },
+          timestamp: Date.now()
+        }
+      : null;
 
-    console.log('Sending event to Digital Twin iframe', message);
+    console.log(
+      'Sending event to Digital Twin iframe',
+      editMessage ?? openedMessage
+    );
 
-    [0, 300, 1000].forEach((delay) => {
+    const delays = editMessage ? [500, 1500, 3000] : [0, 300, 1000];
+
+    delays.forEach((delay) => {
       window.setTimeout(() => {
-        iframe.contentWindow?.postMessage(message, this.digitalTwinOrigin);
+        if (editMessage) {
+          iframe.contentWindow?.postMessage(editMessage, this.digitalTwinOrigin);
+          return;
+        }
+
+        iframe.contentWindow?.postMessage(openedMessage, this.digitalTwinOrigin);
       }, delay);
     });
+  }
+
+  private normalizeOrderPayload(payload: unknown): DigitalTwinOrderPayload {
+    const record = payload as Partial<DigitalTwinOrderPayload>;
+
+    return {
+      sectionKey: record.sectionKey,
+      sectionTitle: record.sectionTitle,
+      order: record.order,
+      components: (record.components ?? []) as DigitalTwinComponentData[]
+    };
   }
 }
