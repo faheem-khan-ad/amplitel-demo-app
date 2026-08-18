@@ -44,14 +44,14 @@
                     <th>Component Name</th>
                     <th>Action Taken</th>
                     <th>Status</th>
-                    <th>X Design</th>
-                    <th>Y Design</th>
-                    <th>Z Design</th>
-                    <th>Direction Orientation Design</th>
+                    <th>X Design (m)</th>
+                    <th>Y Design (m)</th>
+                    <th>Z Design (m)</th>
+                    <th>Direction Orientation Design (deg)</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @for (component of section.components; track component.componentId || component.markerId || component.index; let rowIndex = $index) {
+                  @for (component of section.components; track component.equipmentId; let rowIndex = $index) {
                     <tr>
                       <td>{{ rowIndex + 1 }}</td>
                       <td>
@@ -72,37 +72,37 @@
                           <option value="removed">removed</option>
                         </select>
                       </td>
-                      <td>{{ component.componentStatus || '-' }}</td>
+                      <td>{{ component.status || '-' }}</td>
                       <td>
                         <input
                           class="table-input"
                           type="text"
-                          [value]="component.xOffset ?? ''"
-                          (input)="updateOrderComponent(component, 'xOffset', $event)"
+                          [value]="component.design.x"
+                          (input)="updateOrderComponent(component, 'x', $event)"
                         />
                       </td>
                       <td>
                         <input
                           class="table-input"
                           type="text"
-                          [value]="component.yOffset ?? ''"
-                          (input)="updateOrderComponent(component, 'yOffset', $event)"
+                          [value]="component.design.y"
+                          (input)="updateOrderComponent(component, 'y', $event)"
                         />
                       </td>
                       <td>
                         <input
                           class="table-input"
                           type="text"
-                          [value]="component.zOffset ?? ''"
-                          (input)="updateOrderComponent(component, 'zOffset', $event)"
+                          [value]="component.design.z"
+                          (input)="updateOrderComponent(component, 'z', $event)"
                         />
                       </td>
                       <td>
                         <input
                           class="table-input"
                           type="text"
-                          [value]="component.azimuth ?? ''"
-                          (input)="updateOrderComponent(component, 'azimuth', $event)"
+                          [value]="component.design.directionOrientationDeg"
+                          (input)="updateOrderComponent(component, 'directionOrientationDeg', $event)"
                         />
                       </td>
                     </tr>
@@ -128,28 +128,28 @@
               <thead>
                 <tr>
                   <th>No.</th>
+                  <th>Component ID</th>
                   <th>Component Name</th>
                   <th>Action</th>
                   <th>Status</th>
-                  <th>Source</th>
-                  <th>X Design</th>
-                  <th>Y Design</th>
-                  <th>Z Design</th>
-                  <th>Direction Orientation Design</th>
+                  <th>X Design (m)</th>
+                  <th>Y Design (m)</th>
+                  <th>Z Design (m)</th>
+                  <th>Direction Orientation Design (deg)</th>
                 </tr>
               </thead>
               <tbody>
-                @for (component of submittedComponents(); track component.componentId; let rowIndex = $index) {
+                @for (component of submittedComponents(); track component.equipmentId; let rowIndex = $index) {
                   <tr>
                     <td>{{ rowIndex + 1 }}</td>
+                    <td>{{ component.componentId }}</td>
                     <td>{{ component.componentName || '-' }}</td>
                     <td>{{ component.action || '-' }}</td>
-                    <td>{{ component.componentStatus || '-' }}</td>
-                    <td>{{ component.iframeSessionSource || '-' }}</td>
-                    <td>{{ component.xOffset || '-' }}</td>
-                    <td>{{ component.yOffset || '-' }}</td>
-                    <td>{{ component.zOffset || '-' }}</td>
-                    <td>{{ component.azimuth || '-' }}</td>
+                    <td>{{ component.status || '-' }}</td>
+                    <td>{{ component.design.x }}</td>
+                    <td>{{ component.design.y }}</td>
+                    <td>{{ component.design.z }}</td>
+                    <td>{{ component.design.directionOrientationDeg }}</td>
                   </tr>
                 }
               </tbody>

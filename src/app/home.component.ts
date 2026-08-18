@@ -79,16 +79,11 @@ export class HomeComponent {
   }
 
   private getSectionKey(component: DigitalTwinComponentData): string {
-    const raw = this.getRawRecord(component);
     const value =
       component.orderId ??
       component.order ??
       component.coloId ??
       component.colo ??
-      raw['orderId'] ??
-      raw['order'] ??
-      raw['coloId'] ??
-      raw['colo'] ??
       'created-order';
 
     return String(value);
@@ -98,9 +93,8 @@ export class HomeComponent {
     component: DigitalTwinComponentData,
     key: string
   ): string {
-    const raw = this.getRawRecord(component);
-    const order = component.order ?? component.orderId ?? raw['order'];
-    const colo = component.colo ?? component.coloId ?? raw['colo'];
+    const order = component.order ?? component.orderId;
+    const colo = component.colo ?? component.coloId;
 
     if (order && colo) {
       return `${this.formatSectionLabel('Order', order)} - ${this.formatSectionLabel('Colo', colo)}`;
@@ -129,15 +123,5 @@ export class HomeComponent {
     }
 
     return `${prefix} ${label}`;
-  }
-
-  private getRawRecord(
-    component: DigitalTwinComponentData
-  ): Record<string, unknown> {
-    if (component.raw && typeof component.raw === 'object') {
-      return component.raw as Record<string, unknown>;
-    }
-
-    return {};
   }
 }
