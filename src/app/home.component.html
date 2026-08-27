@@ -3,11 +3,16 @@
     <p class="eyebrow">Amplitel Operations Console</p>
     <h1>Asset Management System</h1>
     <p class="subtitle">
-      Launch key tools from one clean workspace and keep the active view in focus.
+      Launch key tools from one clean workspace and keep the active view in
+      focus.
     </p>
 
     <div class="button-row" aria-label="Application actions">
-      <button class="action-button primary" type="button" (click)="openDigitalTwin()">
+      <button
+        class="action-button primary"
+        type="button"
+        (click)="openDigitalTwin()"
+      >
         Digital Twin
       </button>
     </div>
@@ -16,7 +21,7 @@
       <section class="components-area" aria-label="Digital Twin components">
         <div class="components-summary">
           <h2>Digital Twin Components</h2>
-          <span>{{ components().length }} received</span>
+          <span>{{ displayedAssetsCount() }} updated</span>
         </div>
 
         @for (section of componentSections(); track section.key) {
@@ -41,69 +46,86 @@
                 <thead>
                   <tr>
                     <th>No.</th>
-                    <th>Component Name</th>
-                    <th>Action Taken</th>
+                    <th>Asset ID</th>
+                    <th>Asset Category</th>
                     <th>Status</th>
                     <th>X Design (m)</th>
                     <th>Y Design (m)</th>
                     <th>Z Design (m)</th>
+                    <th>Tilt (deg)</th>
                     <th>Direction Orientation Design (deg)</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @for (component of section.components; track component.equipmentId; let rowIndex = $index) {
+                  @for (
+                    component of section.components;
+                    track $index;
+                    let rowIndex = $index
+                  ) {
                     <tr>
                       <td>{{ rowIndex + 1 }}</td>
+                      <td>{{ component.assetId || '-' }}</td>
+                      <td>{{ component.assetDetails?.assetCategory || '-' }}</td>
+                      <td>{{ component.assetDetails?.status || 'EXISTING' }}</td>
                       <td>
-                        <input
-                          class="table-input"
-                          type="text"
-                          [value]="component.componentName || ''"
-                          (input)="updateOrderComponent(component, 'componentName', $event)"
-                        />
+                        @if (component.assetDetails) {
+                          <input
+                            class="table-input"
+                            type="text"
+                            [value]="component.assetDetails.xDesign_m"
+                            (input)="
+                              updateOrderComponent(component, 'xDesign_m', $event)
+                            "
+                          />
+                        } @else {
+                          -
+                        }
                       </td>
                       <td>
-                        <select
-                          class="table-input"
-                          [value]="component.action || ''"
-                          (change)="updateOrderComponent(component, 'action', $event)"
-                        >
-                          <option value="added">added</option>
-                          <option value="removed">removed</option>
-                        </select>
-                      </td>
-                      <td>{{ component.status || '-' }}</td>
-                      <td>
-                        <input
-                          class="table-input"
-                          type="text"
-                          [value]="component.design.x"
-                          (input)="updateOrderComponent(component, 'x', $event)"
-                        />
+                        @if (component.assetDetails) {
+                          <input
+                            class="table-input"
+                            type="text"
+                            [value]="component.assetDetails.yDesign_m"
+                            (input)="
+                              updateOrderComponent(component, 'yDesign_m', $event)
+                            "
+                          />
+                        } @else {
+                          -
+                        }
                       </td>
                       <td>
-                        <input
-                          class="table-input"
-                          type="text"
-                          [value]="component.design.y"
-                          (input)="updateOrderComponent(component, 'y', $event)"
-                        />
+                        @if (component.assetDetails) {
+                          <input
+                            class="table-input"
+                            type="text"
+                            [value]="component.assetDetails.zDesign_m"
+                            (input)="
+                              updateOrderComponent(component, 'zDesign_m', $event)
+                            "
+                          />
+                        } @else {
+                          -
+                        }
                       </td>
                       <td>
-                        <input
-                          class="table-input"
-                          type="text"
-                          [value]="component.design.z"
-                          (input)="updateOrderComponent(component, 'z', $event)"
-                        />
+                        {{
+                          component.assetDetails?.tiltDesign_deg === null ||
+                          component.assetDetails?.tiltDesign_deg === undefined
+                            ? '-'
+                            : (component.assetDetails?.tiltDesign_deg
+                              | number: '1.2-2')
+                        }}
                       </td>
                       <td>
-                        <input
-                          class="table-input"
-                          type="text"
-                          [value]="component.design.directionOrientationDeg"
-                          (input)="updateOrderComponent(component, 'directionOrientationDeg', $event)"
-                        />
+                        {{
+                          component.assetDetails
+                            ? (component.assetDetails
+                                .directionOrientationDesign_deg
+                              | number: '1.2-2')
+                            : '-'
+                        }}
                       </td>
                     </tr>
                   }
@@ -112,50 +134,6 @@
             </div>
           </article>
         }
-      </section>
-    }
-
-    @if (submittedComponents().length > 0) {
-      <section class="components-area" aria-label="Submitted components">
-        <div class="components-summary">
-          <h2>Submitted Components</h2>
-          <span>{{ submittedComponents().length }} submitted</span>
-        </div>
-
-        <article class="components-table-section">
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>No.</th>
-                  <th>Component ID</th>
-                  <th>Component Name</th>
-                  <th>Action</th>
-                  <th>Status</th>
-                  <th>X Design (m)</th>
-                  <th>Y Design (m)</th>
-                  <th>Z Design (m)</th>
-                  <th>Direction Orientation Design (deg)</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (component of submittedComponents(); track component.equipmentId; let rowIndex = $index) {
-                  <tr>
-                    <td>{{ rowIndex + 1 }}</td>
-                    <td>{{ component.componentId }}</td>
-                    <td>{{ component.componentName || '-' }}</td>
-                    <td>{{ component.action || '-' }}</td>
-                    <td>{{ component.status || '-' }}</td>
-                    <td>{{ component.design.x }}</td>
-                    <td>{{ component.design.y }}</td>
-                    <td>{{ component.design.z }}</td>
-                    <td>{{ component.design.directionOrientationDeg }}</td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
-        </article>
       </section>
     }
   </section>

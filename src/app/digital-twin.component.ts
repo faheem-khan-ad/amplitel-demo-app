@@ -6,9 +6,11 @@ import {
   DigitalTwinOrderPayload,
 } from './component-data.store';
 import {
-  IframeEquipmentDto,
-  isIframeEquipmentDto,
-  toIframeEquipmentDto,
+  cloneOrderAsset,
+  DigitalTwinOrderAssetsResponsePayload,
+  InitialiseDigitalTwinPayload,
+  isOrderAsset,
+  LoadOrderAssetsPayload,
 } from './iframe-equipment.dto';
 
 @Component({
@@ -19,6 +21,18 @@ import {
 })
 export class DigitalTwinComponent implements OnInit, OnDestroy {
   digitalTwinUrl: SafeResourceUrl;
+
+  private readonly initialiseDtConfiguration = {
+    showActionButton: true,
+    actionButtonLabel: 'Create Order',
+    ownerCompanyName: 'TELSTRA',
+  };
+  private readonly loadOrderConfiguration = {
+    showActionButton: true,
+    actionButtonLabel: 'Update Order',
+    ownerCompanyName: 'TELSTRA',
+    allowDragAndDrop: true,
+  };
 
   private readonly digitalTwinSource =
     'http://localhost:8057/canvas/6879f6adef94973d975284c7/3d?workspaceId=64b8f335dc5ac99755c8bc11';
@@ -33,45 +47,46 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (event.data?.type === 'DIGITAL_TWIN_READY') {
-      if (event.data?.source !== 'dronos-digital-twin' || !event.source) {
-        return;
-      }
+    if (event.data?.eventType === 'DT_READY') {
+      if (!event.source) return;
 
       this.readyIframeWindow = event.source;
       this.sendPendingIframeMessage();
       return;
     }
 
-    if (event.data?.type !== 'DIGITAL_TWIN_CREATE_COLS') {
+    if (event.data?.eventType !== 'DIGITAL_TWIN_CREATE_COLS') {
       return;
     }
 
-    const payload = event.data?.payload;
-    const components: unknown = payload?.components;
+    const payload = event.data;
+    const orderAssets: unknown = payload?.orderAssets;
 
-    if (!Array.isArray(components)) {
+    if (!Array.isArray(orderAssets)) {
       console.warn(
-        'DIGITAL_TWIN_CREATE_COLS received without components array',
+        'DIGITAL_TWIN_CREATE_COLS received without orderAssets array',
       );
       return;
     }
 
-    const validComponents = components.filter(isIframeEquipmentDto);
+    const validOrderAssets = orderAssets.filter(isOrderAsset);
 
-    if (validComponents.length !== components.length) {
+    if (validOrderAssets.length !== orderAssets.length) {
       console.warn(
-        'Ignored Digital Twin components that do not match DTO schema version 1',
+        'Ignored Digital Twin assets that do not match the order asset DTO',
       );
     }
 
-    if (!validComponents.length) {
+    if (!validOrderAssets.length) {
       return;
     }
 
-    const orderPayload = this.normalizeOrderPayload(payload, validComponents);
+    const orderPayload: DigitalTwinOrderPayload = {
+      ...(payload as DigitalTwinOrderAssetsResponsePayload),
+      orderAssets: validOrderAssets,
+    };
 
-    console.log('Received components from Digital Twin iframe', orderPayload);
+    console.log('Received order assets from Digital Twin iframe', orderPayload);
     this.componentDataStore.updateEditSection(orderPayload);
     this.router.navigateByUrl('/');
   };
@@ -103,48 +118,29 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
 
   sendDigitalTwinOpened(event: Event): void {
     const iframe = event.target as HTMLIFrameElement;
-    // console.log('iframe.contentWindow: ', iframe.contentWindow);
     const editSection = this.componentDataStore.editSection();
-    const openedMessage = {
-      type: 'DIGITAL_TWIN_OPENED',
-      source: 'amplitel-demo-app',
-      triggeredBy: 'digital-twin-button',
-      payload: {
-        componentSchemaVersion: 1,
-        components: this.componentDataStore
-          .components()
-          .map(toIframeEquipmentDto),
-        submittedComponents: this.componentDataStore
-          .submittedComponents()
-          .map(toIframeEquipmentDto),
-      },
-      timestamp: Date.now(),
-    };
-    const editMessage = editSection
-      ? {
-          type: 'DIGITAL_TWIN_EDIT_SECTION',
-          source: 'amplitel-demo-app',
-          payload: {
-            componentSchemaVersion: 1,
-            sectionKey: editSection.key,
-            sectionTitle: editSection.title,
-            order: {
-              key: editSection.key,
-              title: editSection.title,
-              componentCount: editSection.components.length,
-            },
-            components: editSection.components.map(toIframeEquipmentDto),
-            submittedComponents: this.componentDataStore
-              .submittedComponents()
-              .map(toIframeEquipmentDto),
-          },
-          timestamp: Date.now(),
-        }
-      : null;
+    const message: InitialiseDigitalTwinPayload | LoadOrderAssetsPayload =
+      editSection
+        ? {
+            eventType: 'LOAD_ORDER_ASSETS',
+            siteId: 'VICMEL001',
+            structureId: 'STR_1',
+            timestamp: '2026-07-13T10:30:00Z',
+            dtConfiguration: { ...this.loadOrderConfiguration },
+            orderAssets: editSection.components.map(cloneOrderAsset),
+          }
+        : {
+            eventType: 'INITIALISE_DT',
+            siteId: 'VIC001',
+            structureId: 'STR_1',
+            timestamp: '2026-07-13T10:30:00Z',
+            dtConfiguration: { ...this.initialiseDtConfiguration },
+            allowDragAndDrop: true,
+          };
 
     this.pendingIframeMessage = {
       iframe,
-      message: editMessage ?? openedMessage,
+      message,
     };
     this.sendPendingIframeMessage();
   }
@@ -170,18 +166,4 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
     this.pendingIframeMessage = null;
   }
 
-  private normalizeOrderPayload(
-    payload: unknown,
-    components: IframeEquipmentDto[],
-  ): DigitalTwinOrderPayload {
-    const record = payload as Partial<DigitalTwinOrderPayload>;
-
-    return {
-      componentSchemaVersion: 1,
-      sectionKey: record.sectionKey,
-      sectionTitle: record.sectionTitle,
-      order: record.order,
-      components,
-    };
-  }
 }

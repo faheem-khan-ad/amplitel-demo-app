@@ -1,17 +1,19 @@
+import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   ComponentDataStore,
   ComponentSection,
   DigitalTwinComponentData,
-  EditableComponentField
+  EditableComponentField,
 } from './component-data.store';
 
 @Component({
   selector: 'app-home',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.css',
 })
 export class HomeComponent {
   private readonly router = inject(Router);
@@ -19,8 +21,10 @@ export class HomeComponent {
 
   components = this.componentDataStore.components;
   componentSections = computed(() => this.groupComponents(this.components()));
-  submittedComponents = this.componentDataStore.submittedComponents;
-
+  displayedAssetsCount = computed(() =>
+    this.components().filter((component) => component.assetDetails !== null)
+      .length,
+  );
   openDigitalTwin(): void {
     console.log('Digital Twin clicked');
     this.componentDataStore.setEditSection(null);
@@ -29,20 +33,25 @@ export class HomeComponent {
 
   editSection(section: ComponentSection): void {
     console.log('Editing component section', section);
-    this.componentDataStore.setEditSection(section);
+    this.componentDataStore.setEditSection({
+      ...section,
+      components: this.components().filter(
+        (component) => this.getSectionKey(component) === section.key,
+      ),
+    });
     this.router.navigateByUrl('/digital-twin');
   }
 
   updateOrderComponent(
     component: DigitalTwinComponentData,
     field: EditableComponentField,
-    event: Event
+    event: Event,
   ): void {
     const fieldElement = event.target as HTMLInputElement | HTMLSelectElement;
     this.componentDataStore.updateComponentField(
       component,
       field,
-      fieldElement.value
+      fieldElement.value,
     );
   }
 
@@ -55,25 +64,27 @@ export class HomeComponent {
   }
 
   private groupComponents(
-    components: DigitalTwinComponentData[]
+    components: DigitalTwinComponentData[],
   ): ComponentSection[] {
     const sections = new Map<string, ComponentSection>();
 
-    components.forEach((component) => {
-      const key = this.getSectionKey(component);
-      const section = sections.get(key);
+    components
+      .filter((component) => component.assetDetails !== null)
+      .forEach((component) => {
+        const key = this.getSectionKey(component);
+        const section = sections.get(key);
 
-      if (section) {
-        section.components.push(component);
-        return;
-      }
+        if (section) {
+          section.components.push(component);
+          return;
+        }
 
-      sections.set(key, {
-        key,
-        title: this.getSectionTitle(component, key),
-        components: [component]
+        sections.set(key, {
+          key,
+          title: this.getSectionTitle(component, key),
+          components: [component],
+        });
       });
-    });
 
     return Array.from(sections.values());
   }
@@ -91,7 +102,7 @@ export class HomeComponent {
 
   private getSectionTitle(
     component: DigitalTwinComponentData,
-    key: string
+    key: string,
   ): string {
     const order = component.order ?? component.orderId;
     const colo = component.colo ?? component.coloId;
