@@ -19,3 +19,51 @@
     ></iframe>
   </section>
 </main>
+
+@if (closeConfirmationOpen()) {
+  <div class="modal-backdrop" (click)="cancelClose()">
+    <section
+      class="confirmation-modal"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="close-dialog-title"
+      aria-describedby="close-dialog-description"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="warning-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" focusable="false">
+          <path d="M12 8v5" />
+          <path d="M12 17.01V17" />
+          <path d="M10.3 4.86 3.4 17a2 2 0 0 0 1.74 3h13.72a2 2 0 0 0 1.74-3L13.7 4.86a1.96 1.96 0 0 0-3.4 0Z" />
+        </svg>
+      </div>
+
+      <div class="modal-copy">
+        <p class="modal-label">Unsaved changes</p>
+        <h2 id="close-dialog-title">Close the Digital Twin?</h2>
+        <p id="close-dialog-description">
+          Your latest changes have not been saved. If you close now, those
+          changes will be lost.
+        </p>
+      </div>
+
+      <div class="modal-actions">
+        <button
+          class="modal-button secondary"
+          type="button"
+          autofocus
+          (click)="cancelClose()"
+        >
+          Keep editing
+        </button>
+        <button
+          class="modal-button danger"
+          type="button"
+          (click)="confirmClose()"
+        >
+          Discard &amp; close
+        </button>
+      </div>
+    </section>
+  </div>
+}

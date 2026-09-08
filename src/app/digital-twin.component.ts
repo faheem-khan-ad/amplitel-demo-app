@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, signal } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import {
@@ -7,6 +7,7 @@ import {
 } from './component-data.store';
 import {
   cloneOrderAsset,
+  DigitalTwinCloseCheckPayload,
   DigitalTwinOrderAssetsResponsePayload,
   InitialiseDigitalTwinPayload,
   isOrderAsset,
@@ -38,6 +39,8 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
     'http://localhost:8057/canvas/6879f6adef94973d975284c7/3d?workspaceId=64b8f335dc5ac99755c8bc11';
   private readonly digitalTwinOrigin = 'http://localhost:8057';
   private readyIframeWindow: MessageEventSource | null = null;
+  private hasUnsavedChanges = false;
+  readonly closeConfirmationOpen = signal(false);
   private pendingIframeMessage: {
     iframe: HTMLIFrameElement;
     message: unknown;
@@ -52,6 +55,20 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
 
       this.readyIframeWindow = event.source;
       this.sendPendingIframeMessage();
+      return;
+    }
+
+    if (event.data?.eventType === 'DT_CLOSE_CHECK') {
+      if (
+        event.source !== this.readyIframeWindow ||
+        typeof event.data?.hasUnsavedChanges !== 'boolean'
+      ) {
+        return;
+      }
+
+      const closeCheck = event.data as DigitalTwinCloseCheckPayload;
+      this.hasUnsavedChanges = closeCheck.hasUnsavedChanges;
+      console.log('Digital Twin unsaved-change state updated', closeCheck);
       return;
     }
 
@@ -109,9 +126,35 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
     window.removeEventListener('message', this.handleMessage);
     this.readyIframeWindow = null;
     this.pendingIframeMessage = null;
+    this.hasUnsavedChanges = false;
   }
 
   closeDigitalTwin(): void {
+    if (this.hasUnsavedChanges) {
+      this.closeConfirmationOpen.set(true);
+      return;
+    }
+
+    this.navigateHome();
+  }
+
+  cancelClose(): void {
+    this.closeConfirmationOpen.set(false);
+  }
+
+  confirmClose(): void {
+    this.closeConfirmationOpen.set(false);
+    this.navigateHome();
+  }
+
+  @HostListener('document:keydown.escape')
+  closeConfirmationOnEscape(): void {
+    if (this.closeConfirmationOpen()) {
+      this.cancelClose();
+    }
+  }
+
+  private navigateHome(): void {
     console.log('Digital Twin iframe closed');
     this.router.navigateByUrl('/');
   }

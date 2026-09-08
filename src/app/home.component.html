@@ -3,21 +3,145 @@
     <p class="eyebrow">Amplitel Operations Console</p>
     <h1>Asset Management System</h1>
     <p class="subtitle">
-      Launch key tools from one clean workspace and keep the active view in
-      focus.
+      Review site assets, open the Digital Twin, or validate planned equipment
+      positions from one focused workspace.
     </p>
 
-    <div class="button-row" aria-label="Application actions">
-      <button
-        class="action-button primary"
-        type="button"
-        (click)="openDigitalTwin()"
-      >
-        Digital Twin
-      </button>
-    </div>
+    <section class="tool-workspace" aria-label="Asset management tools">
+      <div class="tool-tabs" role="tablist" aria-label="Select a tool">
+        <button
+          id="digital-twin-tab"
+          class="tool-tab"
+          type="button"
+          role="tab"
+          [class.active]="activeTool() === 'digital-twin'"
+          [attr.aria-selected]="activeTool() === 'digital-twin'"
+          aria-controls="digital-twin-panel"
+          (click)="selectTool('digital-twin')"
+        >
+          <span class="tab-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z" />
+              <path d="m4.5 7.8 7.5 4.3 7.5-4.3M12 12.1V21" />
+            </svg>
+          </span>
+          <span>
+            <strong>Digital Twin</strong>
+            <small>Visualise and edit assets</small>
+          </span>
+        </button>
 
-    @if (componentSections().length > 0) {
+        <button
+          id="spatial-position-tab"
+          class="tool-tab"
+          type="button"
+          role="tab"
+          [class.active]="activeTool() === 'spatial-position'"
+          [attr.aria-selected]="activeTool() === 'spatial-position'"
+          aria-controls="spatial-position-panel"
+          (click)="selectTool('spatial-position')"
+        >
+          <span class="tab-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <circle cx="12" cy="12" r="8" />
+              <circle cx="12" cy="12" r="2.5" />
+              <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+            </svg>
+          </span>
+          <span>
+            <strong>Spatial Position</strong>
+            <small>Validate equipment placement</small>
+          </span>
+        </button>
+      </div>
+
+      <div
+        id="digital-twin-panel"
+        class="tool-panel"
+        role="tabpanel"
+        aria-labelledby="digital-twin-tab"
+        [hidden]="activeTool() !== 'digital-twin'"
+      >
+        <div class="panel-copy">
+          <span class="panel-kicker">3D site workspace</span>
+          <h2>Explore your Digital Twin</h2>
+          <p>
+            Open the interactive site model to inspect equipment, visualise
+            updates, and work with asset data in context.
+          </p>
+        </div>
+        <button
+          class="action-button primary"
+          type="button"
+          (click)="openDigitalTwin()"
+        >
+          Open Digital Twin
+          <span aria-hidden="true">&rarr;</span>
+        </button>
+      </div>
+
+      <div
+        id="spatial-position-panel"
+        class="tool-panel"
+        role="tabpanel"
+        aria-labelledby="spatial-position-tab"
+        [hidden]="activeTool() !== 'spatial-position'"
+      >
+        <div class="panel-copy">
+          <span class="panel-kicker">Placement validation</span>
+          <h2>Check spatial positions</h2>
+          <p>
+            Compare planned asset coordinates with the Digital Twin and quickly
+            identify equipment that needs attention.
+          </p>
+        </div>
+        <button
+          class="action-button primary"
+          type="button"
+          [disabled]="spatialCheckPending()"
+          (click)="openSpatialPositionCheck()"
+        >
+          {{
+            spatialCheckPending()
+              ? 'Checking positions...'
+              : 'Run position check'
+          }}
+          <span aria-hidden="true">&rarr;</span>
+        </button>
+
+        @if (spatialCheckStatus(); as status) {
+          <p class="spatial-check-status" role="status">
+            <span class="status-dot" aria-hidden="true"></span>{{ status }}
+          </p>
+        }
+
+        @if (spatialValidationResponse(); as response) {
+          <section
+            class="spatial-results"
+            aria-label="Spatial validation results"
+          >
+            <div class="results-heading">
+              <span class="status-dot success" aria-hidden="true"></span>
+              <h3>Spatial Position Check Result</h3>
+            </div>
+            <pre>{{ response | json }}</pre>
+          </section>
+        }
+      </div>
+    </section>
+
+    @if (spatialCheckActive()) {
+      <iframe
+        #spatialValidationFrame
+        class="spatial-validation-frame"
+        title="Spatial position validation service"
+        [src]="spatialValidationUrl"
+        tabindex="-1"
+        aria-hidden="true"
+      ></iframe>
+    }
+
+    @if (activeTool() === 'digital-twin' && componentSections().length > 0) {
       <section class="components-area" aria-label="Digital Twin components">
         <div class="components-summary">
           <h2>Digital Twin Components</h2>

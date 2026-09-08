@@ -87,6 +87,42 @@ export interface DigitalTwinOrderAssetsResponsePayload {
   orderAssets: OrderAsset[];
 }
 
+export interface DigitalTwinCloseCheckPayload {
+  eventType: 'DT_CLOSE_CHECK';
+  hasUnsavedChanges: boolean;
+}
+
+export interface SpatialAssetReference {
+  portalUniqueId: string | null;
+  assetId: string | null;
+}
+
+export interface SpatialPositionCheckPayload {
+  eventType: 'SPATIAL_POSITION_CHECK';
+  siteId: string;
+  structureId: string;
+  timestamp: string;
+  assetsToValidate: SpatialAssetReference[];
+  orderAssets: OrderAsset[];
+}
+
+export interface SpatialOverlapAsset extends SpatialAssetReference {
+  reason: string;
+}
+
+export interface SpatialValidationResult extends SpatialAssetReference {
+  isOverlapping: boolean;
+  overlappingAssets: SpatialOverlapAsset[];
+}
+
+export interface SpatialPositionCheckResponsePayload {
+  eventType: 'SPATIAL_POSITION_CHECK';
+  siteId: string;
+  structureId: string;
+  timestamp: string;
+  validationResults: SpatialValidationResult[];
+}
+
 export function isOrderAsset(value: unknown): value is OrderAsset {
   if (!isRecord(value)) return false;
 
