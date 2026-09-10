@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   readonly spatialValidationUrl: SafeResourceUrl =
     this.sanitizer.bypassSecurityTrustResourceUrl(
-      `${this.digitalTwinOrigin}/canvas/6879f6adef94973d975284c7/spatial-validation?workspaceId=64b8f335dc5ac99755c8bc11`,
+      `${this.digitalTwinOrigin}/canvas/amplitel/digital-twin/spatial-validation?token=YRvLK6kN4TZSqrkU3OP00t3pl9EvRni5oHTNLtZ%2BAinmMf%2B7iBQnpuP8sLtCIRELUPVtmpNSysl%2BJlfLQN0Jrl6UyxvRo0rmr%2BAcPBCApy4CZhNPILtL8brJWCjRDbJ8LA2W40H170aVGXc0j9fnXASUfdlPplidFseteZD9ylQBMGl%2FSO6auXUl0OAi8eV865VpqyvcOCF5l6sk%2B5jeY0ZnzJXg9Qgl6Ge6rBjimjKuEpS8q2Is8hFgWyhdEwB3AOsfN4xe2ffxtW2inrMT3w%3D%3D`,
     );
   readonly spatialCheckActive = signal(false);
   readonly spatialCheckPending = signal(false);
@@ -182,40 +182,65 @@ export class HomeComponent implements OnInit, OnDestroy {
       assetsToValidate: [
         {
           portalUniqueId: null,
-          assetId: 'STR_1_ANT_17',
+          assetId: 'STR_1_ANT_7',
         },
         {
           portalUniqueId: null,
-          assetId: 'STR_1_ANT_18',
+          assetId: 'STR_1_ANT_6',
         },
         {
-          portalUniqueId: '85f28f0a-f6a9-460d-b5f1-3e34ca750e0b',
+          portalUniqueId: 'b6fb2809-a886-4591-b9e6-daa2089f504d',
+          assetId: null,
+        },
+        {
+          portalUniqueId: '75d1b0a6-fdb6-438f-92d0-b9fb7b92401a',
           assetId: null,
         },
       ],
       orderAssets: [
-        {
-          portalUniqueId: '85f28f0a-f6a9-460d-b5f1-3e34ca750e0b',
-          assetId: 'Telco Equipment 1',
-          assetDetails: {
-            assetCategory: 'EQUIPMENT',
-            assetTypeKey: 'equipmentType',
-            assetTypeValue: 'AW3161-E-F-V2',
-            status: ComponentAssociationStatus.REQUESTED,
-            directionOrientationDesign_deg: 136.4,
-            xDesign_m: -0.735,
-            yDesign_m: 1.195,
-            zDesign_m: 43.337,
-            tiltDesign_deg: 90,
-            length_mm: 480,
-            width_mm: 172,
-            depth_mm: 52,
-            assetClassCode: 'PANEL',
-            isAssetSwapped: false,
-            swappedWithPortalUniqueId: null,
-          },
-        },
-      ],
+    {
+        "portalUniqueId": "b6fb2809-a886-4591-b9e6-daa2089f504d",
+        "assetId": "Telco Equipment 1",
+        "assetDetails": {
+            "assetCategory": "EQUIPMENT",
+            "assetTypeKey": "equipmentType",
+            "assetTypeValue": "AW3161-E-F-V2",
+            "status": ComponentAssociationStatus.REQUESTED,
+            "directionOrientationDesign_deg": 284.56,
+            "xDesign_m": 1.446,
+            "yDesign_m": -0.098,
+            "zDesign_m": 29.565,
+            "tiltDesign_deg": 90,
+            "length_mm": 783,
+            "width_mm": 280,
+            "depth_mm": 85,
+            "assetClassCode": "PANEL",
+            "isAssetSwapped": false,
+            "swappedWithPortalUniqueId": null
+        }
+    },
+    {
+    "portalUniqueId": "75d1b0a6-fdb6-438f-92d0-b9fb7b92401a",
+    "assetId": "Telco Equipment 2",
+    "assetDetails": {
+        "assetCategory": "EQUIPMENT",
+        "assetTypeKey": "equipmentType",
+        "assetTypeValue": "AW3161-E-F-V2",
+        "status": ComponentAssociationStatus.REQUESTED,
+        "directionOrientationDesign_deg": 80.27,
+        "xDesign_m": 0.023,
+        "yDesign_m": -0.263,
+        "zDesign_m": 42.15,
+        "tiltDesign_deg": 0,
+        "length_mm": 783,
+        "width_mm": 280,
+        "depth_mm": 85,
+        "assetClassCode": "PANEL",
+        "isAssetSwapped": false,
+        "swappedWithPortalUniqueId": null
+    }
+}
+]
     };
 
     this.spatialCheckStatus.set('Checking asset positions...');

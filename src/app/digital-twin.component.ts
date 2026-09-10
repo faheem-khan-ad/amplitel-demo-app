@@ -36,7 +36,7 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
   };
 
   private readonly digitalTwinSource =
-    'http://localhost:8057/canvas/6879f6adef94973d975284c7/3d?workspaceId=64b8f335dc5ac99755c8bc11';
+    'http://localhost:8057//canvas/amplitel/digital-twin?token=YRvLK6kN4TZSqrkU3OP00t3pl9EvRni5oHTNLtZ%2BAinmMf%2B7iBQnpuP8sLtCIRELUPVtmpNSysl%2BJlfLQN0Jrl6UyxvRo0rmr%2BAcPBCApy4CZhNPILtL8brJWCjRDbJ8LA2W40H170aVGXc0j9fnXASUfdlPplidFseteZD9ylQBMGl%2FSO6auXUl0OAi8eV865VpqyvcOCF5l6sk%2B5jeY0ZnzJXg9Qgl6Ge6rBjimjKuEpS8q2Is8hFgWyhdEwB3AOsfN4xe2ffxtW2inrMT3w%3D%3D';
   private readonly digitalTwinOrigin = 'http://localhost:8057';
   private readyIframeWindow: MessageEventSource | null = null;
   private hasUnsavedChanges = false;
