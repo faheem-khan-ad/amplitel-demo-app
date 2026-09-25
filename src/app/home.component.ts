@@ -34,14 +34,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly componentDataStore = inject(ComponentDataStore);
-  private readonly digitalTwinOrigin = 'http://localhost:8057';
+  private readonly digitalTwinOrigin = 'https://staging-amplitel.dronos.ai';
   private spatialValidationFrame: HTMLIFrameElement | null = null;
   private spatialValidationReady = false;
   private spatialReadyTimeout: ReturnType<typeof setTimeout> | null = null;
 
   readonly spatialValidationUrl: SafeResourceUrl =
     this.sanitizer.bypassSecurityTrustResourceUrl(
-      `${this.digitalTwinOrigin}/canvas/amplitel/digital-twin/spatial-validation?token=YRvLK6kN4TZSqrkU3OP00t3pl9EvRni5oHTNLtZ%2BAinmMf%2B7iBQnpuP8sLtCIRELUPVtmpNSysl%2BJlfLQN0Jrl6UyxvRo0rmr%2BAcPBCApy4CZhNPILtL8brJWCjRDbJ8LA2W40H170aVGXc0j9fnXASUfdlPplidFseteZD9ylQBMGl%2FSO6auXUl0OAi8eV865VpqyvcOCF5l6sk%2B5jeY0ZnzJXg9Qgl6Ge6rBjimjKuEpS8q2Is8hFgWyhdEwB3AOsfN4xe2ffxtW2inrMT3w%3D%3D`,
+      `${this.digitalTwinOrigin}/canvas/amplitel/digital-twin/spatial-validation?token=YRvLK6kN4TZSqrkU3OP00p7xE3ww%2FSvT5a%2F38BijekiAFNjfLw0BVaD2JBPFwQHGvdnrQCozrNgWa4Iywz5EApyRavJRVa07gWk1IjsI2ZBAlw2WqvD9uduEKLMlas1kccMnUqrhA3h42nU1HbjLfZIOPQNP%2BmQ4v2YePKRe0Z0YJPygkls38rub1X1p2eROqI7YYjxObspN50tVrTDpm5cJ%2F5Vp7WyPFuisfnYnsCjZ9q6lqTKmaBRU%2BhB41ouuAOsfN4xe2ffxtW2inrMT3w%3D%3D`,
     );
   readonly spatialCheckActive = signal(false);
   readonly spatialCheckPending = signal(false);
@@ -64,7 +64,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     event: MessageEvent,
   ): void => {
     if (
-      event.origin !== this.digitalTwinOrigin ||
       event.source !== this.spatialValidationFrame?.contentWindow
     ) {
       return;

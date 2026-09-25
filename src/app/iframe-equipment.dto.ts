@@ -20,6 +20,39 @@ export enum ComponentAssociationStatus {
   NO_STATUS = 'No Status',
 }
 
+export type HeadframeConfiguration =
+  | {
+      type: 'triangular';
+      frameLength: number;
+      height: number;
+      pipeCount: number;
+    }
+  | {
+      type: 'circular';
+      diameter: number;
+      height: number;
+      pipeCount: number;
+    }
+  | {
+      type: 'mercedes';
+      frameLength: number;
+      height: number;
+      armConfiguration: 'single' | 'double_0_5' | 'double_1';
+      pipeCount: number;
+    }
+  | {
+      type: 'single_mount';
+      height: number;
+    }
+  | {
+      type: 'face_mount' | 'square';
+      frameLength: number;
+      height: number;
+      pipeCount: number;
+    };
+
+export type HeadframeType = HeadframeConfiguration['type'];
+
 export interface OrderAssetDetails {
   assetCategory: string;
   assetTypeKey: string;
@@ -34,6 +67,8 @@ export interface OrderAssetDetails {
   width_mm: number;
   depth_mm: number;
   assetClassCode: string;
+  headframeType?: HeadframeType;
+  headframeConfiguration?: HeadframeConfiguration;
   isAssetSwapped: boolean;
   swappedWithPortalUniqueId: string | null;
 }
@@ -43,19 +78,6 @@ export interface OrderAsset {
   /** Digital Twin component name, including names generated for new assets. */
   assetId: string | null;
   assetDetails: OrderAssetDetails | null;
-}
-
-export interface InitialiseDigitalTwinPayload {
-  eventType: 'INITIALISE_DT';
-  siteId: string;
-  structureId: string;
-  timestamp: string;
-  dtConfiguration: {
-    showActionButton: boolean;
-    actionButtonLabel: string;
-    ownerCompanyName: string;
-  };
-  allowDragAndDrop: boolean;
 }
 
 export interface LoadOrderAssetsPayload {
@@ -73,7 +95,7 @@ export interface LoadOrderAssetsPayload {
 }
 
 export interface DigitalTwinOrderAssetsResponsePayload {
-  eventType: 'DIGITAL_TWIN_CREATE_COLS';
+  eventType: 'LOAD_ORDER_ASSETS';
   siteId: string;
   structureId: string;
   timestamp: string;
@@ -152,6 +174,8 @@ export function isOrderAsset(value: unknown): value is OrderAsset {
     isFiniteNumber(details['width_mm']) &&
     isFiniteNumber(details['depth_mm']) &&
     isString(details['assetClassCode']) &&
+    isOptionalHeadframeType(details['headframeType']) &&
+    isOptionalHeadframeConfiguration(details['headframeConfiguration']) &&
     typeof details['isAssetSwapped'] === 'boolean' &&
     (details['swappedWithPortalUniqueId'] === null ||
       isString(details['swappedWithPortalUniqueId']))
@@ -162,8 +186,68 @@ export function cloneOrderAsset(asset: OrderAsset): OrderAsset {
   return {
     portalUniqueId: asset.portalUniqueId,
     assetId: asset.assetId,
-    assetDetails: asset.assetDetails ? { ...asset.assetDetails } : null,
+    assetDetails: asset.assetDetails
+      ? {
+          ...asset.assetDetails,
+          ...(asset.assetDetails.headframeConfiguration
+            ? {
+                headframeConfiguration: {
+                  ...asset.assetDetails.headframeConfiguration,
+                },
+              }
+            : {}),
+        }
+      : null,
   };
+}
+
+function isOptionalHeadframeType(
+  value: unknown,
+): value is HeadframeType | undefined {
+  return (
+    value === undefined ||
+    value === 'triangular' ||
+    value === 'circular' ||
+    value === 'mercedes' ||
+    value === 'single_mount' ||
+    value === 'face_mount' ||
+    value === 'square'
+  );
+}
+
+function isOptionalHeadframeConfiguration(
+  value: unknown,
+): value is HeadframeConfiguration | undefined {
+  if (value === undefined) return true;
+  if (!isRecord(value) || !isOptionalHeadframeType(value['type'])) return false;
+  if (!isFiniteNumber(value['height'])) return false;
+
+  switch (value['type']) {
+    case 'triangular':
+    case 'face_mount':
+    case 'square':
+      return (
+        isFiniteNumber(value['frameLength']) &&
+        isFiniteNumber(value['pipeCount'])
+      );
+    case 'circular':
+      return (
+        isFiniteNumber(value['diameter']) &&
+        isFiniteNumber(value['pipeCount'])
+      );
+    case 'mercedes':
+      return (
+        isFiniteNumber(value['frameLength']) &&
+        isFiniteNumber(value['pipeCount']) &&
+        (value['armConfiguration'] === 'single' ||
+          value['armConfiguration'] === 'double_0_5' ||
+          value['armConfiguration'] === 'double_1')
+      );
+    case 'single_mount':
+      return true;
+    default:
+      return false;
+  }
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

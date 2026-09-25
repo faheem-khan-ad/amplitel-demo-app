@@ -1,4 +1,12 @@
-import { Component, HostListener, OnDestroy, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  signal,
+} from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import {
@@ -7,11 +15,12 @@ import {
 } from './component-data.store';
 import {
   cloneOrderAsset,
+  ComponentAssociationStatus,
   DigitalTwinCloseCheckPayload,
   DigitalTwinOrderAssetsResponsePayload,
-  InitialiseDigitalTwinPayload,
   isOrderAsset,
   LoadOrderAssetsPayload,
+  OrderAsset,
 } from './iframe-equipment.dto';
 
 @Component({
@@ -23,22 +32,46 @@ import {
 export class DigitalTwinComponent implements OnInit, OnDestroy {
   digitalTwinUrl: SafeResourceUrl;
 
-  private readonly initialiseDtConfiguration = {
-    showActionButton: true,
-    actionButtonLabel: 'Create Order',
-    ownerCompanyName: 'TELSTRA',
-  };
+  @ViewChild('digitalTwinFrame')
+  private digitalTwinFrame?: ElementRef<HTMLIFrameElement>;
+
   private readonly loadOrderConfiguration = {
     showActionButton: true,
     actionButtonLabel: 'Update Order',
-    ownerCompanyName: 'TELSTRA',
+    ownerCompanyName: 'Amplitel',
     allowDragAndDrop: true,
   };
+  private readonly orderAssets: OrderAsset[] = [
+   
+    {
+      portalUniqueId: null,
+      assetId: 'STR_1_HFM_1',
+      assetDetails: null
+    },
+    {
+      portalUniqueId: null,
+       assetId: 'STR_1_HFM_2',
+      assetDetails: null
+    },
+     {
+      portalUniqueId: null,
+      assetId: 'STR_1_TJD_1',
+      assetDetails: null
+    },
+    {
+      portalUniqueId: null,
+      assetId: 'STR_1_ANT_1',
+      assetDetails: null
+    },
+  ];
 
   private readonly digitalTwinSource =
-    'http://localhost:8057//canvas/amplitel/digital-twin?token=YRvLK6kN4TZSqrkU3OP00t3pl9EvRni5oHTNLtZ%2BAinmMf%2B7iBQnpuP8sLtCIRELUPVtmpNSysl%2BJlfLQN0Jrl6UyxvRo0rmr%2BAcPBCApy4CZhNPILtL8brJWCjRDbJ8LA2W40H170aVGXc0j9fnXASUfdlPplidFseteZD9ylQBMGl%2FSO6auXUl0OAi8eV865VpqyvcOCF5l6sk%2B5jeY0ZnzJXg9Qgl6Ge6rBjimjKuEpS8q2Is8hFgWyhdEwB3AOsfN4xe2ffxtW2inrMT3w%3D%3D';
-  private readonly digitalTwinOrigin = 'http://localhost:8057';
+    `https://staging-amplitel.dronos.ai/canvas/amplitel/digital-twin?token=YRvLK6kN4TZSqrkU3OP00p7xE3ww%2FSvT5a%2F38BijekiAFNjfLw0BVaD2JBPFwQHGvdnrQCozrNgWa4Iywz5EApyRavJRVa07gWk1IjsI2ZBAlw2WqvD9uduEKLMlas1kccMnUqrhA3h42nU1HbjLfZIOPQNP%2BmQ4v2YePKRe0Z0YJPygkls38rub1X1p2eROqI7YYjxObspN50tVrTDpm5cJ%2F5Vp7WyPFuisfnYnsCjZ9q6lqTKmaBRU%2BhB41ouuAOsfN4xe2ffxtW2inrMT3w%3D%3D`;
+  private readonly digitalTwinOrigin = new URL(
+    this.digitalTwinSource,
+  ).origin;
   private readyIframeWindow: MessageEventSource | null = null;
+  private hasSentInitialMessage = false;
   private hasUnsavedChanges = false;
   readonly closeConfirmationOpen = signal(false);
   private pendingIframeMessage: {
@@ -46,9 +79,20 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
     message: unknown;
   } | null = null;
   private readonly handleMessage = (event: MessageEvent): void => {
-    if (event.origin !== this.digitalTwinOrigin) {
+    const iframeWindow = this.digitalTwinFrame?.nativeElement.contentWindow;
+    if (
+      !iframeWindow ||
+      event.source !== iframeWindow ||
+      event.origin !== this.digitalTwinOrigin
+    ) {
       return;
     }
+
+    console.log('[Parent iframe message received]', {
+      eventName: event.data?.eventType,
+      message: event.data,
+      origin: event.origin,
+    });
 
     if (event.data?.eventType === 'DT_READY') {
       if (!event.source) return;
@@ -72,7 +116,7 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (event.data?.eventType !== 'DIGITAL_TWIN_CREATE_COLS') {
+    if (event.data?.eventType !== 'LOAD_ORDER_ASSETS') {
       return;
     }
 
@@ -81,7 +125,7 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
 
     if (!Array.isArray(orderAssets)) {
       console.warn(
-        'DIGITAL_TWIN_CREATE_COLS received without orderAssets array',
+        'LOAD_ORDER_ASSETS received without orderAssets array',
       );
       return;
     }
@@ -126,6 +170,7 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
     window.removeEventListener('message', this.handleMessage);
     this.readyIframeWindow = null;
     this.pendingIframeMessage = null;
+    this.hasSentInitialMessage = false;
     this.hasUnsavedChanges = false;
   }
 
@@ -160,26 +205,22 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
   }
 
   sendDigitalTwinOpened(event: Event): void {
+    if (this.hasSentInitialMessage) {
+      return;
+    }
+
     const iframe = event.target as HTMLIFrameElement;
     const editSection = this.componentDataStore.editSection();
-    const message: InitialiseDigitalTwinPayload | LoadOrderAssetsPayload =
-      editSection
-        ? {
-            eventType: 'LOAD_ORDER_ASSETS',
-            siteId: 'VICMEL001',
-            structureId: 'STR_1',
-            timestamp: '2026-07-13T10:30:00Z',
-            dtConfiguration: { ...this.loadOrderConfiguration },
-            orderAssets: editSection.components.map(cloneOrderAsset),
-          }
-        : {
-            eventType: 'INITIALISE_DT',
-            siteId: 'VIC001',
-            structureId: 'STR_1',
-            timestamp: '2026-07-13T10:30:00Z',
-            dtConfiguration: { ...this.initialiseDtConfiguration },
-            allowDragAndDrop: true,
-          };
+    const message: LoadOrderAssetsPayload = {
+      eventType: 'LOAD_ORDER_ASSETS',
+      siteId: 'VICMEL001',
+      structureId: 'STR_1',
+      timestamp: '2026-07-13T10:30:00Z',
+      dtConfiguration: { ...this.loadOrderConfiguration },
+      orderAssets: editSection
+        ? editSection.components.map(cloneOrderAsset)
+        : this.orderAssets.map(cloneOrderAsset),
+    };
 
     this.pendingIframeMessage = {
       iframe,
@@ -204,8 +245,13 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
       return;
     }
 
-    console.log('Sending event to Digital Twin iframe', message);
+    console.log(
+      'Sending event to Digital Twin iframe',
+      this.digitalTwinOrigin,
+      message,
+    );
     iframeContentWindow.postMessage(message, this.digitalTwinOrigin);
+    this.hasSentInitialMessage = true;
     this.pendingIframeMessage = null;
   }
 
