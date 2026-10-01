@@ -53,28 +53,36 @@ export type HeadframeConfiguration =
 
 export type HeadframeType = HeadframeConfiguration['type'];
 
+export type PortalUniqueId = string | number | null;
+
 export interface OrderAssetDetails {
   assetCategory: string;
   assetTypeKey: string;
-  assetTypeValue: string;
+  assetTypeValue: string | null;
   status: ComponentAssociationStatus;
   directionOrientationDesign_deg: number;
   xDesign_m: number;
   yDesign_m: number;
   zDesign_m: number;
   tiltDesign_deg: number | null;
-  length_mm: number;
-  width_mm: number;
-  depth_mm: number;
+  length_mm: number | string;
+  width_mm: number | string;
+  depth_mm: number | string;
   assetClassCode: string;
+  ownerCompany?: string;
+  headFrameHeignt?: string;
+  headFrameLength?: string;
+  headFrameNoOFPipes?: string;
+  headFrameDiameter?: string;
+  headFrameArmConfig?: string;
   headframeType?: HeadframeType;
   headframeConfiguration?: HeadframeConfiguration;
   isAssetSwapped: boolean;
-  swappedWithPortalUniqueId: string | null;
+  swappedWithPortalUniqueId: PortalUniqueId;
 }
 
 export interface OrderAsset {
-  portalUniqueId: string | null;
+  portalUniqueId: PortalUniqueId;
   /** Digital Twin component name, including names generated for new assets. */
   assetId: string | null;
   assetDetails: OrderAssetDetails | null;
@@ -115,7 +123,7 @@ export interface DigitalTwinCloseCheckPayload {
 }
 
 export interface SpatialAssetReference {
-  portalUniqueId: string | null;
+  portalUniqueId: PortalUniqueId;
   assetId: string | null;
 }
 
@@ -151,10 +159,10 @@ export function isOrderAsset(value: unknown): value is OrderAsset {
   const portalUniqueId = value['portalUniqueId'];
   const assetId = value['assetId'];
   const details = value['assetDetails'];
-  if (!isNonEmptyString(portalUniqueId) && !isNonEmptyString(assetId)) {
+  if (!isPortalUniqueIdValue(portalUniqueId) && !isNonEmptyString(assetId)) {
     return false;
   }
-  if (portalUniqueId !== null && !isString(portalUniqueId)) return false;
+  if (portalUniqueId !== null && !isPortalUniqueIdValue(portalUniqueId)) return false;
   if (assetId !== null && !isString(assetId)) return false;
   if (details === null) return true;
   if (!isRecord(details)) return false;
@@ -162,7 +170,8 @@ export function isOrderAsset(value: unknown): value is OrderAsset {
   return (
     isNonEmptyString(details['assetCategory']) &&
     isNonEmptyString(details['assetTypeKey']) &&
-    isNonEmptyString(details['assetTypeValue']) &&
+    (details['assetTypeValue'] === null ||
+      isString(details['assetTypeValue'])) &&
     isComponentAssociationStatus(details['status']) &&
     isFiniteNumber(details['directionOrientationDesign_deg']) &&
     isFiniteNumber(details['xDesign_m']) &&
@@ -170,15 +179,22 @@ export function isOrderAsset(value: unknown): value is OrderAsset {
     isFiniteNumber(details['zDesign_m']) &&
     (details['tiltDesign_deg'] === null ||
       isFiniteNumber(details['tiltDesign_deg'])) &&
-    isFiniteNumber(details['length_mm']) &&
-    isFiniteNumber(details['width_mm']) &&
-    isFiniteNumber(details['depth_mm']) &&
+    isNumericValue(details['length_mm']) &&
+    isNumericValue(details['width_mm']) &&
+    isNumericValue(details['depth_mm']) &&
     isString(details['assetClassCode']) &&
+    (details['ownerCompany'] === undefined ||
+      isString(details['ownerCompany'])) &&
+    isOptionalString(details['headFrameHeignt']) &&
+    isOptionalString(details['headFrameLength']) &&
+    isOptionalString(details['headFrameNoOFPipes']) &&
+    isOptionalString(details['headFrameDiameter']) &&
+    isOptionalString(details['headFrameArmConfig']) &&
     isOptionalHeadframeType(details['headframeType']) &&
     isOptionalHeadframeConfiguration(details['headframeConfiguration']) &&
     typeof details['isAssetSwapped'] === 'boolean' &&
     (details['swappedWithPortalUniqueId'] === null ||
-      isString(details['swappedWithPortalUniqueId']))
+      isPortalUniqueIdValue(details['swappedWithPortalUniqueId']))
   );
 }
 
@@ -260,6 +276,19 @@ function isString(value: unknown): value is string {
 
 function isNonEmptyString(value: unknown): value is string {
   return isString(value) && value.trim().length > 0;
+}
+
+function isPortalUniqueIdValue(value: unknown): value is string | number {
+  return isNonEmptyString(value) || isFiniteNumber(value);
+}
+
+function isNumericValue(value: unknown): value is string | number {
+  return isFiniteNumber(value) ||
+    (isNonEmptyString(value) && Number.isFinite(Number(value)));
+}
+
+function isOptionalString(value: unknown): value is string | undefined {
+  return value === undefined || isString(value);
 }
 
 function isComponentAssociationStatus(

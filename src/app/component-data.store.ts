@@ -87,7 +87,7 @@ export class ComponentDataStore {
 
   private getAssetIdentity(asset: OrderAsset): string {
     return `${
-      asset.portalUniqueId
+      asset.portalUniqueId !== null
         ? `PORTAL:${asset.portalUniqueId}`
         : asset.assetId
           ? `ASSET:${asset.assetId}`
