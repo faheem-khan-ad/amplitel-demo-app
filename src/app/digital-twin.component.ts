@@ -38,35 +38,282 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
   private readonly loadOrderConfiguration = {
     showActionButton: true,
     actionButtonLabel: 'Update Order',
-    ownerCompanyName: 'Amplitel',
+    ownerCompanyName: 'Test OPTUS',
     allowDragAndDrop: true,
   };
-  private readonly orderAssets: OrderAsset[] = [
-   
-    {
-      portalUniqueId: null,
-      assetId: 'STR_1_HFM_1',
-      assetDetails: null
-    },
-    {
-      portalUniqueId: null,
-       assetId: 'STR_1_HFM_2',
-      assetDetails: null
-    },
-     {
-      portalUniqueId: null,
-      assetId: 'STR_1_TJD_1',
-      assetDetails: null
-    },
-    {
+  private readonly orderAssets: OrderAsset[] =
+//    [
+
+//      {
+//       portalUniqueId: null,
+//       assetId: 'STR_1_ANT_1',
+//       assetDetails: null
+//     },
+//     {
+//       portalUniqueId: null,
+//       assetId: 'STR_1_ANT_13',
+//       assetDetails: null
+//     },
+//     {
+//       portalUniqueId: null,
+//       assetId: 'STR_1_ANT_26',
+//       assetDetails: null
+//     },
+//     {
+//       portalUniqueId: null,
+//       assetId: 'STR_1_AVL_4',
+//       assetDetails: null
+//     },
+//     {
+//       portalUniqueId: null,
+//       assetId: 'Test antenna',
+//       assetDetails: null
+//     },
+//     {
+//     "portalUniqueId": 4818,
+//     "assetId": null,
+//     "assetDetails": {
+//         "assetCategory": "ANTENNA",
+//         "status": ComponentAssociationStatus.REQUESTED,
+//         "directionOrientationDesign_deg": 2,
+//         "xDesign_m": 4,
+//         "yDesign_m": 3,
+//         "zDesign_m": 3,
+//         "tiltDesign_deg": 45,
+//         "isAssetSwapped": false,
+//         "swappedWithPortalUniqueId": null,
+//         "headFrameHeignt": "",
+//         "headFrameLength": "",
+//         "headFrameNoOFPipes": "",
+//         "headFrameDiameter": "",
+//         "headFrameArmConfig": "",
+//         "length_mm": "3200.0",
+//         "width_mm": "60.0",
+//         "depth_mm": "60.0",
+//         "assetClassCode": "OMNI",
+//         "assetTypeKey": "antennaType",
+//         "assetTypeValue": "AEA BU6 OMNI"
+//     }
+// }
+//   ];
+[
+  {
       portalUniqueId: null,
       assetId: 'STR_1_ANT_1',
       assetDetails: null
     },
-  ];
+        {
+            "portalUniqueId": null,
+            "assetId": "STR_1_ANT_7",
+            "assetDetails": {
+                "assetCategory": "ANTENNA",
+                "status": ComponentAssociationStatus.EXISTING,
+                "directionOrientationDesign_deg": 23,
+                "xDesign_m": 0,
+                "yDesign_m": 0.5,
+                "zDesign_m": 0,
+                "tiltDesign_deg": 0,
+                "isAssetSwapped": false,
+                "swappedWithPortalUniqueId": null,
+                "headFrameHeignt": "",
+                "headFrameLength": "",
+                "headFrameNoOFPipes": "",
+                "headFrameDiameter": "",
+                "headFrameArmConfig": "",
+                "length_mm": 1415,
+                "width_mm": 395,
+                "depth_mm": 100,
+                "assetClassCode": "PANEL",
+                "assetTypeKey": "CAT4",
+                "assetTypeValue": "ANDREW H13C-060-890VC-ANG PANEL",
+            }
+        },
+        {
+            "portalUniqueId": null,
+            "assetId": "STR_1_ANT_8",
+            "assetDetails": {
+                "assetCategory": "ANTENNA",
+                "status": ComponentAssociationStatus.PROPOSED_CREATE,
+                "directionOrientationDesign_deg": 23,
+                "xDesign_m": -2.629,
+                "yDesign_m": -0.6,
+                "zDesign_m": 0,
+                "tiltDesign_deg": 257,
+                "isAssetSwapped": false,
+                "swappedWithPortalUniqueId": null,
+                "headFrameHeignt": "",
+                "headFrameLength": "",
+                "headFrameNoOFPipes": "",
+                "headFrameDiameter": "",
+                "headFrameArmConfig": "",
+                "length_mm": 1415,
+                "width_mm": 395,
+                "depth_mm": 100,
+                "assetClassCode": "PANEL",
+                "assetTypeKey": "antennaType",
+                "assetTypeValue": "ANDREW H13C-060-890VC-ANG PANEL"
+            }
+        },
+        {
+            "portalUniqueId": null,
+            "assetId": "STR_1_ANT_10",
+            "assetDetails": {
+                "assetCategory": "ANTENNA",
+                "status": ComponentAssociationStatus.PROPOSED_CREATE,
+                "directionOrientationDesign_deg": 23,
+                "xDesign_m": 0.559,
+                "yDesign_m": 0.62,
+                "zDesign_m": 0,
+                "tiltDesign_deg": 42,
+                "isAssetSwapped": false,
+                "swappedWithPortalUniqueId": null,
+                "headFrameHeignt": "",
+                "headFrameLength": "",
+                "headFrameNoOFPipes": "",
+                "headFrameDiameter": "",
+                "headFrameArmConfig": "",
+                "length_mm": 1415,
+                "width_mm": 395,
+                "depth_mm": 100,
+                "assetClassCode": "PANEL",
+                "assetTypeKey": "antennaType",
+                "assetTypeValue": "ANDREW H13C-060-890VC-ANG PANEL"
+            }
+        },
+        {
+            "portalUniqueId": null,
+            "assetId": "STR_1_TJD_2",
+            "assetDetails": {
+                "assetCategory": "TRANSCEIVER",
+                "status": ComponentAssociationStatus.PROPOSED_CREATE,
+                "directionOrientationDesign_deg": 261,
+                "xDesign_m": 0,
+                "yDesign_m": -11.867,
+                "zDesign_m": 22,
+                "tiltDesign_deg": 180,
+                "isAssetSwapped": false,
+                "swappedWithPortalUniqueId": null,
+                "headFrameHeignt": "",
+                "headFrameLength": "",
+                "headFrameNoOFPipes": "",
+                "headFrameDiameter": "",
+                "headFrameArmConfig": "",
+                "length_mm": 240.2,
+                "width_mm": 175.3,
+                "depth_mm": 121,
+                "assetClassCode": "INTEGRATED POWER SPLITTER",
+                "assetTypeKey": "transceiverJunctionDeviceTypeCode",
+                "assetTypeValue": "ERICSSON MINILINK IPS3 6 V2"
+            }
+        },
+        {
+            "portalUniqueId": null,
+            "assetId": "STR_1_TJD_3",
+            "assetDetails": {
+                "assetCategory": "TRANSCEIVER",
+                "status": ComponentAssociationStatus.PROPOSED_CREATE,
+                "directionOrientationDesign_deg": 261,
+                "xDesign_m": -5.767,
+                "yDesign_m": 0,
+                "zDesign_m": 0,
+                "tiltDesign_deg": 270,
+                "isAssetSwapped": false,
+                "swappedWithPortalUniqueId": null,
+                "headFrameHeignt": "",
+                "headFrameLength": "",
+                "headFrameNoOFPipes": "",
+                "headFrameDiameter": "",
+                "headFrameArmConfig": "",
+                "length_mm": 240.2,
+                "width_mm": 175.3,
+                "depth_mm": 121,
+                "assetClassCode": "INTEGRATED POWER SPLITTER",
+                "assetTypeKey": "transceiverJunctionDeviceTypeCode",
+                "assetTypeValue": "ERICSSON MINILINK IPS3 6 V2"
+            }
+        },
+        {
+            "portalUniqueId": null,
+            "assetId": "STR_1_TJD_4",
+            "assetDetails": {
+                "assetCategory": "TRANSCEIVER",
+                "status": ComponentAssociationStatus.PROPOSED_CREATE,
+                "directionOrientationDesign_deg": 261,
+                "xDesign_m": -56.897,
+                "yDesign_m": 65.776,
+                "zDesign_m": 32,
+                "tiltDesign_deg": 319,
+                "isAssetSwapped": false,
+                "swappedWithPortalUniqueId": null,
+                "headFrameHeignt": "",
+                "headFrameLength": "",
+                "headFrameNoOFPipes": "",
+                "headFrameDiameter": "",
+                "headFrameArmConfig": "",
+                "length_mm": 240.2,
+                "width_mm": 175.3,
+                "depth_mm": 121,
+                "assetClassCode": "INTEGRATED POWER SPLITTER",
+                "assetTypeKey": "transceiverJunctionDeviceTypeCode",
+                "assetTypeValue": "ERICSSON MINILINK IPS3 6 V2"
+            }
+        },
+        {
+            "portalUniqueId": null,
+            "assetId": "STR_1_TJD_5",
+            "assetDetails": {
+                "assetCategory": "TRANSCEIVER",
+                "status": ComponentAssociationStatus.PROPOSED_CREATE,
+                "directionOrientationDesign_deg": 261,
+                "xDesign_m": -2.804,
+                "yDesign_m": -0.466,
+                "zDesign_m": 0,
+                "tiltDesign_deg": 261,
+                "isAssetSwapped": false,
+                "swappedWithPortalUniqueId": null,
+                "headFrameHeignt": "",
+                "headFrameLength": "",
+                "headFrameNoOFPipes": "",
+                "headFrameDiameter": "",
+                "headFrameArmConfig": "",
+                "length_mm": 240.2,
+                "width_mm": 175.3,
+                "depth_mm": 121,
+                "assetClassCode": "INTEGRATED POWER SPLITTER",
+                "assetTypeKey": "transceiverJunctionDeviceTypeCode",
+                "assetTypeValue": "ERICSSON MINILINK IPS3 6 V2"
+            }
+        },
+        {
+            "portalUniqueId": null,
+            "assetId": "STR_1_TJD_9",
+            "assetDetails": {
+                "assetCategory": "TRANSCEIVER",
+                "status": ComponentAssociationStatus.PROPOSED_CREATE,
+                "directionOrientationDesign_deg": 261,
+                "xDesign_m": 0,
+                "yDesign_m": 0,
+                "zDesign_m": 0,
+                "tiltDesign_deg": 0,
+                "isAssetSwapped": false,
+                "swappedWithPortalUniqueId": null,
+                "headFrameHeignt": "",
+                "headFrameLength": "",
+                "headFrameNoOFPipes": "",
+                "headFrameDiameter": "",
+                "headFrameArmConfig": "",
+                "length_mm": 240.2,
+                "width_mm": 175.3,
+                "depth_mm": 121,
+                "assetClassCode": "INTEGRATED POWER SPLITTER",
+                "assetTypeKey": "transceiverJunctionDeviceTypeCode",
+                "assetTypeValue": "ERICSSON MINILINK IPS3 6 V2"
+            }
+        }
+    ];
 
   private readonly digitalTwinSource =
-    `https://staging-amplitel.dronos.ai/canvas/amplitel/digital-twin?token=YRvLK6kN4TZSqrkU3OP00p7xE3ww%2FSvT5a%2F38BijekiAFNjfLw0BVaD2JBPFwQHGvdnrQCozrNgWa4Iywz5EApyRavJRVa07gWk1IjsI2ZBAlw2WqvD9uduEKLMlas1kccMnUqrhA3h42nU1HbjLfZIOPQNP%2BmQ4v2YePKRe0Z0YJPygkls38rub1X1p2eROqI7YYjxObspN50tVrTDpm5cJ%2F5Vp7WyPFuisfnYnsCjZ9q6lqTKmaBRU%2BhB41ouuAOsfN4xe2ffxtW2inrMT3w%3D%3D`;
+    `http://localhost:8057/canvas/amplitel/digital-twin?token=YRvLK6kN4TZSqrkU3OP00p7xE3ww%2FSvT5a%2F38BijekiAFNjfLw0BVaD2JBPFwQHGvdnrQCozrNgWa4Iywz5EApyRavJRVa07gWk1IjsI2ZBAlw2WqvD9uduEKLMlas1kccMnUqrhA3h42nU1HbjLfZIOPQNP%2BmQ4v2YePKRe0Z00ICQx35mVmWxr0nB7N%2FQKk%2ByuX5xB%2B0j18HTIOjDouZcJ%2F5Vp7WyPFuisfnYnsCjZ9q6lqTKmaBRU%2BhB41ouuAOsfN4xe2ffxtW2inrMT3w%3D%3D`;
   private readonly digitalTwinOrigin = new URL(
     this.digitalTwinSource,
   ).origin;
@@ -134,12 +381,13 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
 
     if (validOrderAssets.length !== orderAssets.length) {
       console.warn(
-        'Ignored Digital Twin assets that do not match the order asset DTO',
+        'Digital Twin returned assets that do not match the order asset DTO',
+        orderAssets.filter((asset) => !isOrderAsset(asset)),
       );
-    }
-
-    if (!validOrderAssets.length) {
-      return;
+      if (validOrderAssets.length === 0) {
+        this.navigateHome();
+        return;
+      }
     }
 
     const orderPayload: DigitalTwinOrderPayload = {
