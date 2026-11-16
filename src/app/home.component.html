@@ -136,6 +136,7 @@
         class="spatial-validation-frame"
         title="Spatial position validation service"
         [src]="spatialValidationUrl"
+        (load)="onSpatialValidationFrameLoad()"
         tabindex="-1"
         aria-hidden="true"
       ></iframe>
@@ -171,6 +172,7 @@
                   <tr>
                     <th>No.</th>
                     <th>Asset ID</th>
+                    <th>Asset Label</th>
                     <th>Asset Category</th>
                     <th>Status</th>
                     <th>X Design (m)</th>
@@ -188,7 +190,8 @@
                   ) {
                     <tr>
                       <td>{{ rowIndex + 1 }}</td>
-                      <td>{{ component.assetId || '-' }}</td>
+                      <td>{{ component.assetId ?? '-' }}</td>
+                      <td>{{  component.assetLabel ?? '-' }}</td>
                       <td>{{ component.assetDetails?.assetCategory || '-' }}</td>
                       <td>{{ component.assetDetails?.status || 'EXISTING' }}</td>
                       <td>

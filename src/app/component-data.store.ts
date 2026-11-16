@@ -91,7 +91,7 @@ export class ComponentDataStore {
         ? `PORTAL:${asset.portalUniqueId}`
         : asset.assetId
           ? `ASSET:${asset.assetId}`
-          : ''
+          : `LABEL:${asset.assetLabel}`
     }`
       .trim()
       .toUpperCase();

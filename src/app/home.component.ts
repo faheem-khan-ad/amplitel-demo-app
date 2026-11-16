@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   readonly spatialValidationUrl: SafeResourceUrl =
     this.sanitizer.bypassSecurityTrustResourceUrl(
-      `${this.digitalTwinOrigin}/canvas/amplitel/digital-twin/spatial-validation?token=YRvLK6kN4TZSqrkU3OP00p7xE3ww%2FSvT5a%2F38BijekiAFNjfLw0BVaD2JBPFwQHGvdnrQCozrNgWa4Iywz5EApyRavJRVa07gWk1IjsI2ZBAlw2WqvD9uduEKLMlas1kccMnUqrhA3h42nU1HbjLfZIOPQNP%2BmQ4v2YePKRe0Z00ICQx35mVmWxr0nB7N%2FQKk%2ByuX5xB%2B0j18HTIOjDouZcJ%2F5Vp7WyPFuisfnYnsCjZ9q6lqTKmaBRU%2BhB41ouuAOsfN4xe2ffxtW2inrMT3w%3D%3D`,
+      `${this.digitalTwinOrigin}/canvas/amplitel/digital-twin/spatial-validation?token=YRvLK6kN4TZSqrkU3OP00p7xE3ww%2FSvT5a%2F38BijekiAFNjfLw0BVaD2JBPFwQHGvdnrQCozrNgWa4Iywz5EApyRavJRVa07gWk1IjsI2ZBAlw2WqvD9uduEKLMlas1kccMnUqrhA3h42nU1HbjLfZIOPQNP%2BmQ4v2YePKRe0Z0HIY6l0WYxEBkZp%2BtdLO2HdjjlpO7TW5lGEGleXiC4wDJs%2B2HVZhaE1svL%2FaD1Rf569i6qKfhlaaj4HIHnWWAYAOsfN4xe2ffxtW2inrMT3w%3D%3D`,
     );
   readonly spatialCheckActive = signal(false);
   readonly spatialCheckPending = signal(false);
@@ -66,13 +66,25 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (
       event.source !== this.spatialValidationFrame?.contentWindow
     ) {
+      if (event.origin === this.digitalTwinOrigin) {
+        console.warn('Ignoring spatial validation message from a different window', {
+          eventType: event.data?.eventType,
+          origin: event.origin,
+        });
+      }
       return;
     }
 
+    console.log('Received event from spatial validation iframe', {
+      eventType: event.data?.eventType,
+      origin: event.origin,
+    });
+
     if (event.data?.eventType === 'DT_READY') {
+      if (this.spatialValidationReady) return;
       this.clearSpatialReadyTimeout();
       this.spatialValidationReady = true;
-      this.sendSpatialPositionCheck();
+      if (this.spatialCheckPending()) this.sendSpatialPositionCheck();
       return;
     }
 
@@ -124,6 +136,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   openSpatialPositionCheck(): void {
+    console.log('Spatial position check requested', {
+      iframeAttached: this.spatialValidationFrame !== null,
+      iframeReady: this.spatialValidationReady,
+    });
     this.spatialValidationResponse.set(null);
     this.spatialCheckPending.set(true);
 
@@ -135,6 +151,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.spatialCheckStatus.set('Loading spatial validation endpoint...');
     this.spatialCheckActive.set(true);
     this.startSpatialReadyTimeout();
+  }
+
+  onSpatialValidationFrameLoad(): void {
+    console.log('Spatial validation iframe load event received', {
+      iframeReady: this.spatialValidationReady,
+    });
+    if (this.spatialCheckPending() && !this.spatialValidationReady) {
+      this.spatialCheckStatus.set('Waiting for spatial validation service readiness (DT_READY)...');
+    }
   }
 
   editSection(section: ComponentSection): void {
@@ -171,7 +196,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private sendSpatialPositionCheck(): void {
     const iframeWindow = this.spatialValidationFrame?.contentWindow;
-    if (!iframeWindow || !this.spatialValidationReady) return;
+    if (!iframeWindow || !this.spatialValidationReady) {
+      console.warn('Spatial position check cannot be sent yet', {
+        iframeAttached: !!iframeWindow,
+        iframeReady: this.spatialValidationReady,
+      });
+      return;
+    }
 
     const message: SpatialPositionCheckPayload = 
 //     {
@@ -249,251 +280,44 @@ export class HomeComponent implements OnInit, OnDestroy {
     "siteId": "ACT10002353",
     "structureId": "STR_1",
       "timestamp": '2026-07-13T10:30:00Z',
-    "assetsToValidate": [
+   "assetsToValidate": [
         {
-            "portalUniqueId": null,
-            "assetId": "STR_1_ANT_7"
-        },
-        {
-            "portalUniqueId": null,
-            "assetId": "STR_1_ANT_8"
-        },
-        {
-            "portalUniqueId": null,
-            "assetId": "STR_1_ANT_10"
-        },
-        {
-            "portalUniqueId": null,
-            "assetId": "STR_1_TJD_2"
-        },
-        {
-            "portalUniqueId": null,
-            "assetId": "STR_1_TJD_3"
-        },
-        {
-            "portalUniqueId": null,
-            "assetId": "STR_1_TJD_4"
-        },
-        {
-            "portalUniqueId": null,
-            "assetId": "STR_1_TJD_5"
-        },
-        {
-            "portalUniqueId": null,
-            "assetId": "STR_1_TJD_9"
+            "portalUniqueId": "PSTR_1_PANT_1",
+            "assetId": null
         }
     ],
     "orderAssets": [
-        {
-            "portalUniqueId": null,
-            "assetId": "STR_1_ANT_7",
-            "assetDetails": {
-                "assetCategory": "ANTENNA",
-                "status": ComponentAssociationStatus.PROPOSED_CREATE,
-                "directionOrientationDesign_deg": 23,
-                "xDesign_m": 0,
-                "yDesign_m": 0.5,
-                "zDesign_m": 0,
-                "tiltDesign_deg": 0,
-                "isAssetSwapped": false,
-                "swappedWithPortalUniqueId": null,
-                "headFrameHeignt": "",
-                "headFrameLength": "",
-                "headFrameNoOFPipes": "",
-                "headFrameDiameter": "",
-                "headFrameArmConfig": "",
-                "length_mm": 1415,
-                "width_mm": 395,
-                "depth_mm": 100,
-                "assetClassCode": "PANEL",
-                "assetTypeKey": "CAT4",
-                "assetTypeValue": "ANDREW H13C-060-890VC-ANG PANEL",
-            }
-        },
-        {
-            "portalUniqueId": null,
-            "assetId": "STR_1_ANT_8",
-            "assetDetails": {
-                "assetCategory": "ANTENNA",
-                "status": ComponentAssociationStatus.PROPOSED_CREATE,
-                "directionOrientationDesign_deg": 23,
-                "xDesign_m": -2.629,
-                "yDesign_m": -0.6,
-                "zDesign_m": 0,
-                "tiltDesign_deg": 257,
-                "isAssetSwapped": false,
-                "swappedWithPortalUniqueId": null,
-                "headFrameHeignt": "",
-                "headFrameLength": "",
-                "headFrameNoOFPipes": "",
-                "headFrameDiameter": "",
-                "headFrameArmConfig": "",
-                "length_mm": 1415,
-                "width_mm": 395,
-                "depth_mm": 100,
-                "assetClassCode": "PANEL",
-                "assetTypeKey": "antennaType",
-                "assetTypeValue": "ANDREW H13C-060-890VC-ANG PANEL"
-            }
-        },
-        {
-            "portalUniqueId": null,
-            "assetId": "STR_1_ANT_10",
-            "assetDetails": {
-                "assetCategory": "ANTENNA",
-                "status": ComponentAssociationStatus.PROPOSED_CREATE,
-                "directionOrientationDesign_deg": 23,
-                "xDesign_m": 0.559,
-                "yDesign_m": 0.62,
-                "zDesign_m": 0,
-                "tiltDesign_deg": 42,
-                "isAssetSwapped": false,
-                "swappedWithPortalUniqueId": null,
-                "headFrameHeignt": "",
-                "headFrameLength": "",
-                "headFrameNoOFPipes": "",
-                "headFrameDiameter": "",
-                "headFrameArmConfig": "",
-                "length_mm": 1415,
-                "width_mm": 395,
-                "depth_mm": 100,
-                "assetClassCode": "PANEL",
-                "assetTypeKey": "antennaType",
-                "assetTypeValue": "ANDREW H13C-060-890VC-ANG PANEL"
-            }
-        },
-        {
-            "portalUniqueId": null,
-            "assetId": "STR_1_TJD_2",
-            "assetDetails": {
-                "assetCategory": "TRANSCEIVER",
-                "status": ComponentAssociationStatus.PROPOSED_CREATE,
-                "directionOrientationDesign_deg": 261,
-                "xDesign_m": 0,
-                "yDesign_m": -11.867,
-                "zDesign_m": 22,
-                "tiltDesign_deg": 180,
-                "isAssetSwapped": false,
-                "swappedWithPortalUniqueId": null,
-                "headFrameHeignt": "",
-                "headFrameLength": "",
-                "headFrameNoOFPipes": "",
-                "headFrameDiameter": "",
-                "headFrameArmConfig": "",
-                "length_mm": 240.2,
-                "width_mm": 175.3,
-                "depth_mm": 121,
-                "assetClassCode": "INTEGRATED POWER SPLITTER",
-                "assetTypeKey": "transceiverJunctionDeviceTypeCode",
-                "assetTypeValue": "ERICSSON MINILINK IPS3 6 V2"
-            }
-        },
-        {
-            "portalUniqueId": null,
-            "assetId": "STR_1_TJD_3",
-            "assetDetails": {
-                "assetCategory": "TRANSCEIVER",
-                "status": ComponentAssociationStatus.PROPOSED_CREATE,
-                "directionOrientationDesign_deg": 261,
-                "xDesign_m": -5.767,
-                "yDesign_m": 0,
-                "zDesign_m": 0,
-                "tiltDesign_deg": 270,
-                "isAssetSwapped": false,
-                "swappedWithPortalUniqueId": null,
-                "headFrameHeignt": "",
-                "headFrameLength": "",
-                "headFrameNoOFPipes": "",
-                "headFrameDiameter": "",
-                "headFrameArmConfig": "",
-                "length_mm": 240.2,
-                "width_mm": 175.3,
-                "depth_mm": 121,
-                "assetClassCode": "INTEGRATED POWER SPLITTER",
-                "assetTypeKey": "transceiverJunctionDeviceTypeCode",
-                "assetTypeValue": "ERICSSON MINILINK IPS3 6 V2"
-            }
-        },
-        {
-            "portalUniqueId": null,
-            "assetId": "STR_1_TJD_4",
-            "assetDetails": {
-                "assetCategory": "TRANSCEIVER",
-                "status": ComponentAssociationStatus.PROPOSED_CREATE,
-                "directionOrientationDesign_deg": 261,
-                "xDesign_m": -56.897,
-                "yDesign_m": 65.776,
-                "zDesign_m": 32,
-                "tiltDesign_deg": 319,
-                "isAssetSwapped": false,
-                "swappedWithPortalUniqueId": null,
-                "headFrameHeignt": "",
-                "headFrameLength": "",
-                "headFrameNoOFPipes": "",
-                "headFrameDiameter": "",
-                "headFrameArmConfig": "",
-                "length_mm": 240.2,
-                "width_mm": 175.3,
-                "depth_mm": 121,
-                "assetClassCode": "INTEGRATED POWER SPLITTER",
-                "assetTypeKey": "transceiverJunctionDeviceTypeCode",
-                "assetTypeValue": "ERICSSON MINILINK IPS3 6 V2"
-            }
-        },
-        {
-            "portalUniqueId": null,
-            "assetId": "STR_1_TJD_5",
-            "assetDetails": {
-                "assetCategory": "TRANSCEIVER",
-                "status": ComponentAssociationStatus.PROPOSED_CREATE,
-                "directionOrientationDesign_deg": 261,
-                "xDesign_m": -2.804,
-                "yDesign_m": -0.466,
-                "zDesign_m": 0,
-                "tiltDesign_deg": 261,
-                "isAssetSwapped": false,
-                "swappedWithPortalUniqueId": null,
-                "headFrameHeignt": "",
-                "headFrameLength": "",
-                "headFrameNoOFPipes": "",
-                "headFrameDiameter": "",
-                "headFrameArmConfig": "",
-                "length_mm": 240.2,
-                "width_mm": 175.3,
-                "depth_mm": 121,
-                "assetClassCode": "INTEGRATED POWER SPLITTER",
-                "assetTypeKey": "transceiverJunctionDeviceTypeCode",
-                "assetTypeValue": "ERICSSON MINILINK IPS3 6 V2"
-            }
-        },
-        {
-            "portalUniqueId": null,
-            "assetId": "STR_1_TJD_9",
-            "assetDetails": {
-                "assetCategory": "TRANSCEIVER",
-                "status": ComponentAssociationStatus.PROPOSED_CREATE,
-                "directionOrientationDesign_deg": 261,
-                "xDesign_m": 0,
-                "yDesign_m": 0,
-                "zDesign_m": 0,
-                "tiltDesign_deg": 0,
-                "isAssetSwapped": false,
-                "swappedWithPortalUniqueId": null,
-                "headFrameHeignt": "",
-                "headFrameLength": "",
-                "headFrameNoOFPipes": "",
-                "headFrameDiameter": "",
-                "headFrameArmConfig": "",
-                "length_mm": 240.2,
-                "width_mm": 175.3,
-                "depth_mm": 121,
-                "assetClassCode": "INTEGRATED POWER SPLITTER",
-                "assetTypeKey": "transceiverJunctionDeviceTypeCode",
-                "assetTypeValue": "ERICSSON MINILINK IPS3 6 V2"
-            }
+      {
+        "portalUniqueId": "PSTR_1_PANT_1",
+        "assetId": null,
+        "assetLabel": "PSTR_1_PANT_1",
+        "isSpatialValidationApplicable": true,
+        "assetDetails": {
+            "assetCategory": "ANTENNA",
+            "status": ComponentAssociationStatus.REQUESTED,
+            "directionOrientationDesign_deg": 180,
+            "xDesign_m": -2.22,
+            "yDesign_m": -1.454,
+            "zDesign_m": 30.005,
+            "tiltDesign_deg": 0,
+            "isAssetSwapped": false,
+            "swapPairId": null,
+            "headFrameHeignt": "",
+            "headFrameLength": "",
+            "headFrameNoOFPipes": "",
+            "headFrameDiameter": "",
+            "headFrameArmConfig": "",
+            "length_mm": 1580,
+            "width_mm": 370,
+            "depth_mm": 170,
+            "assetClassCode": "PANEL",
+            "assetTypeKey": "antennaType",
+            "assetTypeValue": "ACE TECHNOLOGY ACS-15-65 PANEL",
+            "assetModelNumber": null,
+            "ownerCompany": "Test KT"
         }
+    }
     ]
-    // orderAssets: []
 }
 
     this.spatialCheckStatus.set('Checking asset positions...');
@@ -507,20 +331,22 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.spatialReadyTimeout = setTimeout(() => {
       if (this.spatialValidationReady) return;
 
+      console.error('Spatial validation iframe did not send DT_READY before the timeout');
       this.spatialCheckActive.set(false);
       this.finishSpatialPositionCheck(
         'Spatial validation endpoint did not become ready. Please try again.',
       );
-    }, 10_000);
+    }, 200_000);
   }
 
   private startSpatialResponseTimeout(): void {
     this.clearSpatialReadyTimeout();
     this.spatialReadyTimeout = setTimeout(() => {
+      console.error('Spatial validation iframe did not return SPATIAL_POSITION_CHECK results before the timeout');
       this.finishSpatialPositionCheck(
         'The spatial position check timed out. Please try again.',
       );
-    }, 15_000);
+    }, 175_000);
   }
 
   private finishSpatialPositionCheck(status: string): void {
