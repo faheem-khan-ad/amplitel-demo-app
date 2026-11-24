@@ -70,57 +70,72 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
           //       "ownerCompany": "Test KT"
           //   }
           // }
-          //       {
+                {
 
-          //   "isSpatialValidationApplicable": true,
+            "portalUniqueId": null,
 
-          //   "portalUniqueId": null,
+            "assetId": "STR_1_HFM_27",
 
-          //   "assetId": "STR_1_HFM_3",
+            "assetLabel": null,
 
-          //   "assetLabel": null,
+            "assetDetails": {
 
-          //   "assetDetails": {
+                "assetCategory": "HEADFRAMEMOUNT",
 
-          //       "assetCategory": "HEADFRAME",
+                "assetTypeKey": "headFrameMountTypeCode",
 
-          //       "assetTypeKey": "headFrameMountTypeCode",
+                "assetTypeValue": 'Custom Mercedes',
+                "assetModelNumber": 'Testing model number',
 
-          //       "assetTypeValue": null,
-          //       "assetModelNumber": 'Testing model number',
+                "headFrameArmConfig": "Single",
+                "headFrameHeight": "1",
+                "headFrameLength": "1",
+                "headFrameNoOfPipes": "1",
 
-          //       "status": ComponentAssociationStatus.PROPOSED_CREATE,
+                "status": ComponentAssociationStatus.RESERVED,
 
-          //       "directionOrientationDesign_deg": 179.78,
+                "directionOrientationDesign_deg": 179.78,
 
-          //       "xDesign_m": 0,
+                "xDesign_m": 0,
 
-          //       "yDesign_m": 0,
+                "yDesign_m": 0,
 
-          //       "zDesign_m": 47.668,
+                "zDesign_m": 47.668,
 
-          //       "tiltDesign_deg": null,
+                "tiltDesign_deg": null,
 
-          //       "length_mm": 1000,
+                "length_mm": 1000,
 
-          //       "width_mm": 1000,
+                "width_mm": 1000,
 
-          //       "depth_mm": 1000,
+                "depth_mm": 1000,
 
-          //       "assetClassCode": "SQUARE HEADFRAME",
+                "assetClassCode": "Custom Mercedes",
 
-          //       "isAssetSwapped": false,
+                "isAssetSwapped": false,
 
-          //       "swapPairId": null,
+                "swapPairId": null,
 
-          //       "ownerCompany": "Telstra"
+                "ownerCompany": "Telstra"
 
-          //   },
-          // },
+            },
+          },
 
     {
           portalUniqueId: null,
-      assetId: 'STR_1_TJD_37',
+      assetId: 'STR_1_HFM_5',
+       assetDetails: null,
+      assetLabel: null,
+    },
+     {
+          portalUniqueId: null,
+      assetId: 'STR_1_TJD_17',
+       assetDetails: null,
+      assetLabel: null,
+    },
+    {
+          portalUniqueId: null,
+      assetId: 'STR_1_HFM_29',
        assetDetails: null,
       assetLabel: null,
     },
@@ -129,8 +144,8 @@ export class DigitalTwinComponent implements OnInit, OnDestroy {
 
   private readonly digitalTwinSource =
   //  `http://localhost:8057/canvas/amplitel/digital-twin?token=YRvLK6kN4TZSqrkU3OP00t3pl9EvRni5oHTNLtZ%2BAinmMf%2B7iBQnpuP8sLtCIRELUPVtmpNSysl%2BJlfLQN0Jrl6UyxvRo0rmr%2BAcPBCApy5Alw2WqvD9uduEKLMlas1kccMnUqrhA3h42nU1HbjLfZIOPQNP%2BmQ4v2YePKRe0Z17LeaAKkjtKQI80MOuvb%2FxopF9LNns%2FUWKVAt1kZw9zjJs%2B2HVZhaE1svL%2FaD1Rf569i6qKfhlaaj4HIHnWWAYAOsfN4xe2ffxtW2inrMT3w%3D%3D`;
-    // `http://localhost:8057/canvas/amplitel/digital-twin?token=YRvLK6kN4TZSqrkU3OP00p7xE3ww%2FSvT5a%2F38BijekiAFNjfLw0BVaD2JBPFwQHGvdnrQCozrNgWa4Iywz5EApyRavJRVa07gWk1IjsI2ZBAlw2WqvD9uduEKLMlas1kccMnUqrhA3h42nU1HbjLfZIOPQNP%2BmQ4v2YePKRe0Z0HIY6l0WYxEBkZp%2BtdLO2HdjjlpO7TW5lGEGleXiC4wDJs%2B2HVZhaE1svL%2FaD1Rf569i6qKfhlaaj4HIHnWWAYAOsfN4xe2ffxtW2inrMT3w%3D%3D`;
-  `https://51s02bf9-8057.asse.devtunnels.ms/canvas/amplitel/digital-twin?token=YRvLK6kN4TZSqrkU3OP00p7xE3ww%2FSvT5a%2F38BijekiAFNjfLw0BVaD2JBPFwQHGvdnrQCozrNgWa4Iywz5EApyRavJRVa07gWk1IjsI2ZBAlw2WqvD9uduEKLMlas1kccMnUqrhA3h42nU1HbjLfZIOPQNP%2BmQ4v2YePKRe0Z0Y%2B8bT6IpOdzKP%2BxInkxex2E%2Fi%2FWfvZgJASpD7v%2Bv30JcJ%2F5Vp7WyPFuisfnYnsCjZ9q6lqTKmaBRU%2BhB41ouuAOsfN4xe2ffxtW2inrMT3w%3D%3D`;
+    `http://localhost:8057/canvas/amplitel/digital-twin?token=YRvLK6kN4TZSqrkU3OP00p7xE3ww%2FSvT5a%2F38BijekiAFNjfLw0BVaD2JBPFwQHGvdnrQCozrNgWa4Iywz5EApyRavJRVa07gWk1IjsI2ZBAlw2WqvD9uduEKLMlas1kccMnUqrhA3h42nU1HbjLfZIOPQNP%2BmQ4v2YePKRe0Z0HIY6l0WYxEBkZp%2BtdLO2HdjjlpO7TW5lGEGleXiC4wDJs%2B2HVZhaE1svL%2FaD1Rf569i6qKfhlaaj4HIHnWWAYAOsfN4xe2ffxtW2inrMT3w%3D%3D`;
+  // `https://amplitel.dronos.ai/canvas/amplitel/digital-twin?token=RslmAT3ywKZ%2B9ZbrPuo4XMoL0AqCIvGB7rShv4onnh54saqwMnctWBi8tfpPT2D4CbaKFaqUOVjZRkO%2B7zbsSdyZzLQ84ej887207dMFpjZZmN6aaqV8HyzOqnd0hfPrYrCNbQ9jnKUqLRS2KzfzYdjgR5R6QHdmRtyA99dgacn2Pd3rSr%2BVraC8AnPDmcFG1Be7ZGLXRCO7O6DUWpuoh2t9tA348O1CM856b6elEfyzgVqoAuTZaVe1UvRllBEWYXWxh4RRl2zszb4sHn5LrQ%3D%3D`;
     private readonly digitalTwinOrigin = new URL(
     this.digitalTwinSource,
   ).origin;

@@ -70,9 +70,9 @@ export interface OrderAssetDetails {
   inverted?: string | number | boolean | null;
   maxOutputPower_W?: string | number | boolean | null;
   notes?: string | number | boolean | null;
-  headFrameHeignt?: string | number;
+  headFrameHeight?: string | number;
   headFrameLength?: string | number;
-  headFrameNoOFPipes?: string;
+  headFrameNoOfPipes?: string;
   headFrameDiameter?: string;
   headFrameArmConfig?: string;
   headframeType?: HeadframeType;
